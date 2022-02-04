@@ -1,0 +1,18 @@
+package {{packageName}}.network
+
+interface NetworkLogger {
+
+fun request(
+    method: RequestMethod,
+    absoluteUrl: String,
+    headers: Map<String, String>,
+    body: ByteArray?
+)
+
+fun response(
+        method: RequestMethod,
+        absoluteUrl: String,
+        failureDescription: String?,
+        response: Response?,
+    )
+}

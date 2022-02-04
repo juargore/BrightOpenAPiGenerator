@@ -1,0 +1,3 @@
+ai.bright.codegen.BrightGenerator
+org.openapitools.codegen.CodegenConfig
+org.openapitools.codegen.DefaultCodegen

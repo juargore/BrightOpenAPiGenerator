@@ -1,0 +1,20 @@
+package {{packageName}}.network
+
+import {{packageName}}.types.uuidString
+
+suspend fun request(
+    requestConfig: RequestConfig,
+    body: ByteArray?,
+    log: NetworkLogger
+): Response {
+
+    val updatedHeaders = requestConfig.headers
+
+    updatedHeaders["X-BAI-CORRELATION-ID"] = uuidString()
+
+    return nativeRequest(
+        requestConfig.copy(headers = updatedHeaders),
+            body,
+            log
+    )
+}

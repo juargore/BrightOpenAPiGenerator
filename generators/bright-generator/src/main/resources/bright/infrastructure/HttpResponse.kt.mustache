@@ -1,0 +1,45 @@
+package {{packageName}}.infrastructure
+
+import {{packageName}}.network.Response
+import io.ktor.client.call.receive
+import io.ktor.client.call.typeInfo
+import io.ktor.http.Headers
+import io.ktor.http.isSuccess
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+
+{{#nonPublicApi}}internal {{/nonPublicApi}}data class HttpResponse<T>(
+    val response: Response,
+    val status: Int,
+    val success: Boolean,
+    private val _body: T?
+) {
+    val body: T
+        get() = _body!!
+}
+
+{{#nonPublicApi}}internal {{/nonPublicApi}}inline fun <reified T: Any> Response.rsp(json: Json): HttpResponse<T> {
+    val body:T? = if (!this.success) {
+        null
+    } else if (Unit is T) {
+        Unit
+    } else {
+        val body = this.body ?: throw Exception("Failed")
+        if (body is T) {
+            body
+        } else if (
+            headers.mapKeys { it.key.lowercase() }["content-type"]?.lowercase()?.startsWith("application/json") ?: false
+        ) {
+            json.decodeFromString<T>(body.decodeToString())
+        } else {
+            throw Exception("Failed to decode")
+        }
+    }
+    return HttpResponse(
+        response = this,
+        status = this.code,
+        success = this.success,
+        _body = body
+    )
+}
+

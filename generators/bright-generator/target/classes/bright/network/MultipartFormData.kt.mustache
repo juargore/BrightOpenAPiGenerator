@@ -1,0 +1,78 @@
+package {{packageName}}.network
+
+import {{packageName}}.types.uuidString
+import io.ktor.utils.io.core.*
+
+
+expect suspend fun nativeRequest(
+requestConfig: RequestConfig,
+body: ByteArray?,
+log: NetworkLogger
+): Response
+
+fun multipartFormData(block: MultipartFormBuilder.() -> Unit): MultipartFormData =
+MultipartFormBuilder().apply(block).content()
+
+class MultipartFormData(
+val body: ByteArray,
+val length: Int,
+val boundary: String
+)
+
+class MultipartFormBuilder {
+private val parts = mutableListOf<Part>()
+
+    private val boundary = boundaryGen()
+
+    private val line_return_bytes = "\r\n".toByteArray()
+    private val boundary_bytes = "--$boundary\r\n".toByteArray()
+    private val terminal_boundary_bytes = "--$boundary--\r\n".toByteArray()
+
+    fun append(key: String, content: ByteArray) {
+    parts.add(Part(key, content))
+    }
+
+    fun content(): MultipartFormData {
+    // A multipart form response is made up of a set of random boundary bytes separating
+    // content pieces.
+    val byteParts = parts.flatMap {
+    listOf(
+    boundary_bytes,
+    // <HEADERS>
+        "Content-Disposition: form-data; name=\"${it.key}\"; filename=\"${it.key}\"".toByteArray(),
+        line_return_bytes,
+        "Content-Type: application/octet-stream".toByteArray(),
+        line_return_bytes,
+        // </HEADERS>
+    line_return_bytes,
+    it.content,
+    line_return_bytes,
+    )
+    } + terminal_boundary_bytes
+
+    val totalSize = byteParts.fold(0) { acc, part -> acc + part.size }
+
+    val finalContent = ByteArray(totalSize)
+
+    var offset = 0
+
+    // Copy parts to the final content.
+    byteParts.forEach {
+    it.copyInto(finalContent, destinationOffset = offset)
+    offset += it.size
+    }
+
+    return MultipartFormData(
+    body = finalContent,
+    length = totalSize,
+    boundary = boundary
+    )
+    }
+
+    private class Part(
+    val key: String,
+    val content: ByteArray
+    )
+
+    private fun boundaryGen(): String = uuidString()
+    }

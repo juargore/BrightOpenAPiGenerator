@@ -1,0 +1,8 @@
+package {{packageName}}.network
+
+data class RequestConfig(
+    val method: RequestMethod,
+    val path: String,
+    val headers: MutableMap<String, String>,
+    val query: MutableMap<String, List<String>>,
+)

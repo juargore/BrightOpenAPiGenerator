@@ -1,0 +1,2955 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Bright API (Device)",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/favicon.ico": {
+      "get": {
+        "summary": "Favicon",
+        "description": "Everyone needs a sweet favicon",
+        "operationId": "favicon_favicon_ico_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "scanner"
+        ],
+        "summary": "Root",
+        "description": "Root '/' is just general scanner information",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScannerInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/version": {
+      "get": {
+        "tags": [
+          "scanner"
+        ],
+        "summary": "Get Version",
+        "description": "This endpoint should be used to determine if the server is up\nand the version of the API and Software running on the scanner.",
+        "operationId": "get_version_v1_version_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScannerVersion"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/": {
+      "get": {
+        "tags": [
+          "scanner"
+        ],
+        "summary": "Root",
+        "description": "General scanner information",
+        "operationId": "root_v1__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScannerInfo"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "scanner"
+        ],
+        "summary": "Update Scanner Info",
+        "description": "Client will tell the server all the initial state information",
+        "operationId": "update_scanner_info_v1__patch",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Starttime",
+              "type": "string",
+              "format": "date-time"
+            },
+            "name": "startTime",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Linear Distance",
+              "type": "integer"
+            },
+            "name": "linear_distance",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Max Iterations",
+              "type": "integer"
+            },
+            "name": "max_iterations",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Enablehw",
+              "type": "boolean"
+            },
+            "name": "enableHw",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Enablelaser",
+              "type": "boolean"
+            },
+            "name": "enableLaser",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Enablecamera",
+              "type": "boolean"
+            },
+            "name": "enableCamera",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Deg Per Move",
+              "type": "number"
+            },
+            "name": "deg_per_move",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Deg Per Second",
+              "type": "number"
+            },
+            "name": "deg_per_second",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Deg Per Scan Image",
+              "type": "number"
+            },
+            "name": "deg_per_scan_image",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Automated Radius",
+              "type": "number"
+            },
+            "name": "automated_radius",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Automated Step On Arc",
+              "type": "number"
+            },
+            "name": "automated_step_on_arc",
+            "in": "query"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GPSCoordinates"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScannerInfo"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/update": {
+      "post": {
+        "tags": [
+          "scanner"
+        ],
+        "summary": "Update Software",
+        "operationId": "update_software_v1_update_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_update_software_v1_update_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScannerInfo"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/update": {
+      "post": {
+        "tags": [
+          "scanner"
+        ],
+        "summary": "Update Software V2",
+        "operationId": "update_software_v2_v2_update_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_update_software_v2_v2_update_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/move": {
+      "get": {
+        "tags": [
+          "move"
+        ],
+        "summary": "Get Move Position",
+        "description": "Return the current ABSOLUTE position from the scanner",
+        "operationId": "get_move_position_v1_move_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coordinates"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/move/": {
+      "patch": {
+        "tags": [
+          "move"
+        ],
+        "summary": "Set Move Position",
+        "description": "Update the state of the scanner position.\n\nIf `home` set `True`, the scanner will return both motors to the home position.\nIf `clear` is set `True`, the scanner will set the current motor positions to 0.\n    This will mean all operations will be performed relative to the new position\nIf `reset` set `True`, the scanner will return to the 0 position (even if not home).",
+        "operationId": "set_move_position_v1_move__patch",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Home",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "home",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Clear",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "clear",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Reset",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "reset",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coordinates"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/move/angle": {
+      "patch": {
+        "tags": [
+          "move"
+        ],
+        "summary": "Set Move Angle",
+        "description": "Set the new spherical (angular) position for the scanner.\n\nIf `absolute` is True then the values will be used as the new position regardless of current location.\nIf `absolute` is False then the values will be relative to the current position.\nIf `distance` is True then the values will be compensated based upon distance\n\n> NOTE: There are limits on the allowed movement depending on positions.",
+        "operationId": "set_move_angle_v1_move_angle_patch",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Absolute",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "absolute",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Distance",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "distance",
+            "in": "query"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Angles",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AnglePosition"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coordinates"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/move/linear": {
+      "patch": {
+        "tags": [
+          "move"
+        ],
+        "summary": "Set Move Linear",
+        "description": "Set the new cartesian (X,Y,Z) position for the scanner in meters\n\nIf `absolute` is True then the values will be used as the new position regardless of current location.\nIf `absolute` is False then the values will be relative to the current position.\n\n> NOTE: There are limits on the allowed movement depending on positions.",
+        "operationId": "set_move_linear_v1_move_linear_patch",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Absolute",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "absolute",
+            "in": "query"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Points",
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/XYZPosition"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coordinates"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/move/circle": {
+      "patch": {
+        "tags": [
+          "move"
+        ],
+        "summary": "Move Circle",
+        "description": "Sweep in circles centered around current point.\n\nALL UNITS ARE IN **METERS**\n\n`radius_start` Is the size of the first circle around current point\n`radius_stop` Is the size of the largest circle around current point\n`radius_step` Is the step increase for each circle\n\n> NOTE: There are limits on the allowed movement depending on positions.",
+        "operationId": "move_circle_v1_move_circle_patch",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Radius Start",
+              "type": "number"
+            },
+            "name": "radius_start",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Radius Stop",
+              "type": "number"
+            },
+            "name": "radius_stop",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Radius Step",
+              "type": "number"
+            },
+            "name": "radius_step",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Step On Arc",
+              "type": "number"
+            },
+            "name": "step_on_arc",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coordinates"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/move/box": {
+      "patch": {
+        "tags": [
+          "move"
+        ],
+        "summary": "Move Box",
+        "description": "Evenly scan in a box pattern around the current point.\n\nALL UNITS ARE IN **METERS**\n\n`width` the x size of the box\n`length` the y size of the box\n`step` the distance between each point\n\n> NOTE: There are limits on the allowed movement depending on positions.",
+        "operationId": "move_box_v1_move_box_patch",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Width",
+              "type": "number"
+            },
+            "name": "width",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Length",
+              "type": "number"
+            },
+            "name": "length",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "title": "Step",
+              "type": "number"
+            },
+            "name": "step",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coordinates"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/move/automated": {
+      "get": {
+        "tags": [
+          "move"
+        ],
+        "summary": "Get Automated",
+        "description": "Get automated scan progress.",
+        "operationId": "get_automated_v1_move_automated_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomatedStatus"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "move"
+        ],
+        "summary": "Move Automated",
+        "description": "Perform an automated scan.",
+        "operationId": "move_automated_v1_move_automated_patch",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Cancel",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "cancel",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Complete",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "complete",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coordinates"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/move/perimeter": {
+      "patch": {
+        "tags": [
+          "move"
+        ],
+        "summary": "Move Perimeter",
+        "description": "Track the perimeter of the pool\n\nIf `find` set `True`, then the do a circle and look for 2 perimeter points\nIf `follow` set `True`, then extrapolate perimeter from previous data and move",
+        "operationId": "move_perimeter_v1_move_perimeter_patch",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Find",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "find",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Follow",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "follow",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/current/image": {
+      "get": {
+        "tags": [
+          "current"
+        ],
+        "summary": "Get Current Image",
+        "description": "Return the current picture from the scanner",
+        "operationId": "get_current_image_v1_current_image_get",
+        "responses": {
+          "200": {
+            "description": "Current picture from scanner",
+            "content": {
+              "image/jpg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/current/position": {
+      "get": {
+        "tags": [
+          "current"
+        ],
+        "summary": "Get Current Position",
+        "description": "Return the current ABSOLUTE position from the scanner",
+        "operationId": "get_current_position_v1_current_position_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Coordinates"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/current/pointcloud": {
+      "get": {
+        "tags": [
+          "current"
+        ],
+        "summary": "Get Current Pointcloud",
+        "description": "Return the current set of point cloud data.\n\nNOTE: If no `ACTIVE` scan, then no data",
+        "operationId": "get_current_pointcloud_v1_current_pointcloud_get",
+        "responses": {
+          "200": {
+            "description": "Return the scan data",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/logs": {
+      "get": {
+        "tags": [
+          "scanner"
+        ],
+        "summary": "Get Logs",
+        "description": "Return the logs.\n\nIf `include_projects=True` then the projects will be captured as well.  \n    This will include all scans, features, resources.\n    This will **exclude** images",
+        "operationId": "get_logs_v1_logs_get",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Include Projects",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "include_projects",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the logs",
+            "content": {
+              "application/gzip": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/projects/": {
+      "get": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "List Projects",
+        "description": "Retrieve the list of all projects the scanner knows about.",
+        "operationId": "list_projects_v1_projects__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response List Projects V1 Projects  Get",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/projects/{project_id}": {
+      "get": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Get Project",
+        "description": "Retrieve a specific project by UUID",
+        "operationId": "get_project_v1_projects__project_id__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "project_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Start Project",
+        "description": "Start a new project",
+        "operationId": "start_project_v1_projects__project_id__post",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "project_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Delete Project",
+        "description": "Delete a specific project by UUID",
+        "operationId": "delete_project_v1_projects__project_id__delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "project_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "projects"
+        ],
+        "summary": "Update Project",
+        "description": "Update a specific project by UUID",
+        "operationId": "update_project_v1_projects__project_id__patch",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string"
+            },
+            "name": "project_id",
+            "in": "path"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Active",
+              "type": "boolean"
+            },
+            "name": "active",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/scans/": {
+      "get": {
+        "tags": [
+          "scans"
+        ],
+        "summary": "List Scans",
+        "description": "Retrieve the list of all scans.\nOptionally list only the given project.",
+        "operationId": "list_scans_v1_scans__get",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Project Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "project_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response List Scans V1 Scans  Get",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Scan"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "scans"
+        ],
+        "summary": "Create Scan",
+        "description": "Create a new scan at the specified location",
+        "operationId": "create_scan_v1_scans__post",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "project_id",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Triggerlaseraftermove",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "triggerLaserAfterMove",
+            "in": "query"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GPSCoordinates"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scan"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/scans/{scan_id}": {
+      "get": {
+        "tags": [
+          "scans"
+        ],
+        "summary": "Get Scan",
+        "operationId": "get_scan_v1_scans__scan_id__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Scan Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "scan_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scan"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "scans"
+        ],
+        "summary": "Delete Scan",
+        "description": "Remove a specific scan by UUID",
+        "operationId": "delete_scan_v1_scans__scan_id__delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Scan Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "scan_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "scans"
+        ],
+        "summary": "Update Scan",
+        "description": "Update a specific scan by UUID.\n- `pause` can act as a two-way operations.\n    - True will turn off the laser measurement\n    - False will turn on the laser measurement and resume scan\n> NOTE: This is still considered the `active_scan_id` for the system.  It is allowed to `complete` a `paused` scan.\n- `complete` will cause the scanner to process this scan.\n> NOTE: Caller will wait for scan state to go `complete` before doing anything else with other scans.",
+        "operationId": "update_scan_v1_scans__scan_id__patch",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Scan Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "scan_id",
+            "in": "path"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Pause Scan",
+              "type": "boolean"
+            },
+            "name": "pause_scan",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Process Scan",
+              "type": "boolean"
+            },
+            "name": "process_scan",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scan"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/resources/": {
+      "get": {
+        "tags": [
+          "resources"
+        ],
+        "summary": "Get All Resources",
+        "description": "List all resources on scanner",
+        "operationId": "get_all_resources_v1_resources__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Get All Resources V1 Resources  Get",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Resource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/resources/{resource_id}": {
+      "get": {
+        "tags": [
+          "resources"
+        ],
+        "summary": "Get Resource",
+        "description": "Return a specific resource",
+        "operationId": "get_resource_v1_resources__resource_id__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Resource Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "resource_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "resources"
+        ],
+        "summary": "Delete Resource",
+        "description": "Remove a specific resource",
+        "operationId": "delete_resource_v1_resources__resource_id__delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Resource Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "resource_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/resources/{resource_id}/raw": {
+      "get": {
+        "tags": [
+          "resources"
+        ],
+        "summary": "Get Resource Data",
+        "description": "Return a specific resource",
+        "operationId": "get_resource_data_v1_resources__resource_id__raw_get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Resource Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "resource_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the scan data",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/features/": {
+      "get": {
+        "tags": [
+          "features"
+        ],
+        "summary": "Get Features",
+        "description": "List all feature(s) on scanner.\n\nIf no arguments passed it will return **ALL** features for **ALL** projects\nIf `project_id` passed, it will return **ALL** features for that one project",
+        "operationId": "get_features_v1_features__get",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Project Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "project_id",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Get Features V1 Features  Get",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Feature"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "features"
+        ],
+        "summary": "Add New Feature",
+        "description": "Add a new feature repository.\n\n> **NOTE** This will not immediately add any points or images",
+        "operationId": "add_new_feature_v1_features__post",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Project Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "project_id",
+            "in": "query"
+          },
+          {
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/FeatureType"
+            },
+            "name": "feature_type",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Feature Name",
+              "type": "string"
+            },
+            "name": "feature_name",
+            "in": "query"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Tags",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feature"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "features"
+        ],
+        "summary": "Update Feature",
+        "operationId": "update_feature_v1_features__patch",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Feature Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "feature_id",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Remove Last Point",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "remove_last_point",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Complete Feature",
+              "type": "boolean",
+              "default": false
+            },
+            "name": "complete_feature",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feature"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/features/{feature_id}": {
+      "get": {
+        "tags": [
+          "features"
+        ],
+        "summary": "Get Feature",
+        "description": "Return a specific feature",
+        "operationId": "get_feature_v1_features__feature_id__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Feature Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "feature_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feature"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "features"
+        ],
+        "summary": "Delete Feature",
+        "description": "Remove a specific feature",
+        "operationId": "delete_feature_v1_features__feature_id__delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Feature Id",
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": "feature_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/upload/calibrations": {
+      "post": {
+        "summary": "Uploadfile",
+        "operationId": "uploadFile_v1_upload_calibrations_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_uploadFile_v1_upload_calibrations_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnglePosition": {
+        "title": "AnglePosition",
+        "type": "object",
+        "properties": {
+          "azimuth": {
+            "title": "Azimuth Position",
+            "type": "number",
+            "description": "Azimuth position in degrees",
+            "default": 0
+          },
+          "elevation": {
+            "title": "Elevation Position",
+            "type": "number",
+            "description": "Elevation angle position in degrees",
+            "default": 0
+          }
+        }
+      },
+      "AutomatedStatus": {
+        "title": "AutomatedStatus",
+        "required": [
+          "automated_progress"
+        ],
+        "type": "object",
+        "properties": {
+          "automated_progress": {
+            "title": "Automated Progress",
+            "type": "string"
+          }
+        }
+      },
+      "Body_update_software_v1_update_post": {
+        "title": "Body_update_software_v1_update_post",
+        "required": [
+          "update",
+          "checksum"
+        ],
+        "type": "object",
+        "properties": {
+          "update": {
+            "title": "Update",
+            "type": "string",
+            "format": "binary"
+          },
+          "checksum": {
+            "title": "Checksum",
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "Body_update_software_v2_v2_update_post": {
+        "title": "Body_update_software_v2_v2_update_post",
+        "required": [
+          "update",
+          "checksum"
+        ],
+        "type": "object",
+        "properties": {
+          "update": {
+            "title": "Update",
+            "type": "string",
+            "format": "binary"
+          },
+          "checksum": {
+            "title": "Checksum",
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "Body_uploadFile_v1_upload_calibrations_post": {
+        "title": "Body_uploadFile_v1_upload_calibrations_post",
+        "required": [
+          "internal_file",
+          "external_file"
+        ],
+        "type": "object",
+        "properties": {
+          "internal_file": {
+            "title": "Internal File",
+            "type": "string",
+            "format": "binary"
+          },
+          "external_file": {
+            "title": "External File",
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "Coordinates": {
+        "title": "Coordinates",
+        "required": [
+          "xyz"
+        ],
+        "type": "object",
+        "properties": {
+          "az_deg": {
+            "title": "Azimuth Degrees ABSOLUTE Position",
+            "maximum": 360,
+            "minimum": -360,
+            "type": "number",
+            "description": "Azimuth angle position in degrees relative to origin",
+            "default": 0
+          },
+          "el_deg": {
+            "title": "Elevation Degrees ABSOLUTE Position",
+            "maximum": 360,
+            "minimum": -360,
+            "type": "number",
+            "description": "Elevation angle position in degrees relative to origin",
+            "default": 0
+          },
+          "dist_m": {
+            "title": "Distance in meters",
+            "type": "number",
+            "description": "Distance at the current position in meters",
+            "default": 0
+          },
+          "xyz": {
+            "title": "XYZ Coordinates",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/XYZPosition"
+              }
+            ],
+            "description": "Coordinates are only valid is distance is valid"
+          },
+          "last_distance_valid": {
+            "title": "Last Distance Valid",
+            "type": "boolean",
+            "description": "True if the distance provided is from latest information",
+            "default": false
+          },
+          "laser_img_pixel": {
+            "title": "Laser Image Pixel",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ImagePixel"
+              }
+            ],
+            "description": "Pixel coordinates in video frame relative to top-left"
+          },
+          "img_size": {
+            "title": "Image Size ",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ImagePixel"
+              }
+            ],
+            "description": "Total pixel dimensions of images"
+          }
+        }
+      },
+      "ErrorMessage": {
+        "title": "ErrorMessage",
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "description": "Generic message class for return models with an error"
+      },
+      "Feature": {
+        "title": "Feature",
+        "required": [
+          "name",
+          "id",
+          "dir",
+          "resources",
+          "project_id",
+          "scan_id",
+          "feature_type"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string",
+            "format": "uuid"
+          },
+          "update_time": {
+            "title": "Update Time",
+            "type": "string",
+            "format": "date-time"
+          },
+          "dir": {
+            "title": "Dir",
+            "type": "string",
+            "format": "directory-path"
+          },
+          "resources": {
+            "title": "Resources",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Resource"
+            }
+          },
+          "project_id": {
+            "title": "Project Id",
+            "type": "string",
+            "format": "uuid"
+          },
+          "scan_id": {
+            "title": "ScanID if one present",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "If feature part of a project, then this is null"
+          },
+          "feature_type": {
+            "$ref": "#/components/schemas/FeatureType"
+          },
+          "tags": {
+            "title": "Tags appended to feature",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "A tag is a free-form string stored in a list",
+            "default": []
+          },
+          "raw_point_cloud": {
+            "$ref": "#/components/schemas/Resource"
+          },
+          "cartesian_point_cloud": {
+            "$ref": "#/components/schemas/Resource"
+          }
+        },
+        "description": "Features contain the data from the projects and scans"
+      },
+      "FeatureType": {
+        "title": "FeatureType",
+        "enum": [
+          "anchor",
+          "decking",
+          "wall",
+          "calibration",
+          "perimeter"
+        ],
+        "type": "string",
+        "description": "Each feature has a different type to differentiate"
+      },
+      "GPSCoordinates": {
+        "title": "GPSCoordinates",
+        "type": "object",
+        "properties": {
+          "lat": {
+            "title": "Latitude in degrees",
+            "maximum": 90,
+            "minimum": -90,
+            "type": "number",
+            "default": 0
+          },
+          "long": {
+            "title": "Longtitue in degrees",
+            "maximum": 180,
+            "minimum": -180,
+            "type": "number",
+            "default": 0
+          }
+        }
+      },
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "ImagePixel": {
+        "title": "ImagePixel",
+        "type": "object",
+        "properties": {
+          "w": {
+            "title": "Width Image position in pixel relative to top-left",
+            "type": "integer",
+            "default": 0
+          },
+          "h": {
+            "title": "Height Image position in pixel relative to top-left",
+            "type": "integer",
+            "default": 0
+          }
+        }
+      },
+      "Project": {
+        "title": "Project",
+        "required": [
+          "name",
+          "id",
+          "dir",
+          "resources",
+          "start_time",
+          "state",
+          "scans",
+          "features"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string",
+            "format": "uuid"
+          },
+          "update_time": {
+            "title": "Update Time",
+            "type": "string",
+            "format": "date-time"
+          },
+          "dir": {
+            "title": "Dir",
+            "type": "string",
+            "format": "directory-path"
+          },
+          "resources": {
+            "title": "Resources",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Resource"
+            }
+          },
+          "start_time": {
+            "title": "Start Time",
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "$ref": "#/components/schemas/ProjectState"
+          },
+          "scans": {
+            "title": "Scans",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Scan"
+            }
+          },
+          "features": {
+            "title": "Features",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Feature"
+            }
+          },
+          "raw_point_cloud": {
+            "$ref": "#/components/schemas/Resource"
+          },
+          "cartesian_point_cloud": {
+            "$ref": "#/components/schemas/Resource"
+          }
+        },
+        "description": "Projects contain all the information about the entire pool including scans, features, resources\n\n**Note** only manipulate the `cartesian_point_cloud` and `measurements` directly.\nDo **not** manipulate them from the resrouce list"
+      },
+      "ProjectState": {
+        "title": "ProjectState",
+        "enum": [
+          "active",
+          "draft",
+          "complete"
+        ],
+        "type": "string",
+        "description": "What is the state of this project\n- Active = Project created, may contain data, can have more scans added\n- Draft = Project with active scan which will update/modify resources\n- Complete = Project and will **not** change"
+      },
+      "Resource": {
+        "title": "Resource",
+        "required": [
+          "name",
+          "id",
+          "dir",
+          "resource_state",
+          "resource_type",
+          "project_id",
+          "file"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string",
+            "format": "uuid"
+          },
+          "update_time": {
+            "title": "Update Time",
+            "type": "string",
+            "format": "date-time"
+          },
+          "dir": {
+            "title": "Dir",
+            "type": "string",
+            "format": "directory-path"
+          },
+          "resource_state": {
+            "$ref": "#/components/schemas/ResourceState"
+          },
+          "resource_type": {
+            "$ref": "#/components/schemas/ResourceType"
+          },
+          "project_id": {
+            "title": "Project Id",
+            "type": "string",
+            "format": "uuid"
+          },
+          "version": {
+            "title": "Incrementing version of resource",
+            "minimum": 0,
+            "type": "integer",
+            "description": "If a resource updates once available the version will increment",
+            "default": 0
+          },
+          "tags": {
+            "title": "Tags appended to resource",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "A tag is a free-form string stored in a list",
+            "default": []
+          },
+          "scan_id": {
+            "title": "ID of the scan which created this resource",
+            "type": "string",
+            "description": "If resource part of a project, then this is null",
+            "format": "uuid"
+          },
+          "feature_id": {
+            "title": "ID of the feature which created this resource",
+            "type": "string",
+            "description": "This is null if not part of a feature",
+            "format": "uuid"
+          },
+          "file": {
+            "title": "File",
+            "type": "string",
+            "format": "file-path"
+          }
+        },
+        "description": "Resources contain the data from the projects and scans"
+      },
+      "ResourceState": {
+        "title": "ResourceState",
+        "enum": [
+          "pending",
+          "partial",
+          "available"
+        ],
+        "type": "string",
+        "description": "What is the state of this resource\n- Pending = ID known, but no data\n- Partial = Data present, but will change\n- Available = Data present and will **not** change"
+      },
+      "ResourceType": {
+        "title": "ResourceType",
+        "enum": [
+          "image",
+          "raw_point_cloud",
+          "cartesian_point_cloud",
+          "mobile_point_cloud",
+          "feature_point_cloud",
+          "measurement",
+          "log"
+        ],
+        "type": "string",
+        "description": "Each resource has a different type to differentiate"
+      },
+      "Scan": {
+        "title": "Scan",
+        "required": [
+          "name",
+          "id",
+          "dir",
+          "resources",
+          "project_id",
+          "start_time",
+          "scan_state",
+          "location"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string",
+            "format": "uuid"
+          },
+          "update_time": {
+            "title": "Update Time",
+            "type": "string",
+            "format": "date-time"
+          },
+          "dir": {
+            "title": "Dir",
+            "type": "string",
+            "format": "directory-path"
+          },
+          "resources": {
+            "title": "Resources",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Resource"
+            }
+          },
+          "project_id": {
+            "title": "Project Id",
+            "type": "string",
+            "format": "uuid"
+          },
+          "start_time": {
+            "title": "Start Time",
+            "type": "string",
+            "format": "date-time"
+          },
+          "end_time": {
+            "title": "End Time",
+            "type": "string",
+            "format": "date-time"
+          },
+          "scan_state": {
+            "$ref": "#/components/schemas/ScanState"
+          },
+          "location": {
+            "$ref": "#/components/schemas/GPSCoordinates"
+          },
+          "raw_point_cloud": {
+            "$ref": "#/components/schemas/Resource"
+          },
+          "cartesian_point_cloud": {
+            "$ref": "#/components/schemas/Resource"
+          },
+          "perimeter": {
+            "$ref": "#/components/schemas/Feature"
+          },
+          "log": {
+            "$ref": "#/components/schemas/Resource"
+          }
+        },
+        "description": "Scans contain all the information about a specific tripod placement\n\n**Note** only manipulate the `raw_point_cloud` and `cartesian_point_cloud` directly.\nDo **not** manipulate them from the resrouce list"
+      },
+      "ScanState": {
+        "title": "ScanState",
+        "enum": [
+          "active",
+          "pause",
+          "process",
+          "complete"
+        ],
+        "type": "string",
+        "description": "An enumeration."
+      },
+      "ScannerInfo": {
+        "title": "ScannerInfo",
+        "required": [
+          "serialNum",
+          "modelNumber",
+          "buildTime",
+          "softwareVersion",
+          "apiVersion",
+          "serverImageHash",
+          "startTime"
+        ],
+        "type": "object",
+        "properties": {
+          "serialNum": {
+            "title": "Serialnum",
+            "type": "string"
+          },
+          "modelNumber": {
+            "title": "Modelnumber",
+            "type": "string"
+          },
+          "buildTime": {
+            "title": "Buildtime",
+            "type": "string",
+            "format": "date-time"
+          },
+          "softwareVersion": {
+            "title": "Softwareversion",
+            "type": "string"
+          },
+          "apiVersion": {
+            "title": "Apiversion",
+            "type": "string"
+          },
+          "serverImageHash": {
+            "title": "Serverimagehash",
+            "type": "string"
+          },
+          "startTime": {
+            "title": "Starttime",
+            "type": "string",
+            "format": "date-time"
+          },
+          "currentTime": {
+            "title": "Currenttime",
+            "type": "string",
+            "format": "date-time"
+          },
+          "hwOn": {
+            "title": "Hwon",
+            "type": "boolean",
+            "default": false
+          },
+          "laserOn": {
+            "title": "Laseron",
+            "type": "boolean",
+            "default": false
+          },
+          "cameraOn": {
+            "title": "Cameraon",
+            "type": "boolean",
+            "default": false
+          },
+          "active_scan": {
+            "$ref": "#/components/schemas/Scan"
+          },
+          "active_scan_id": {
+            "title": "Active Scan Id",
+            "type": "string",
+            "format": "uuid"
+          },
+          "active_scan_state": {
+            "$ref": "#/components/schemas/ScannerScanState"
+          },
+          "active_feature": {
+            "$ref": "#/components/schemas/Feature"
+          },
+          "active_feature_id": {
+            "title": "Active Feature Id",
+            "type": "string",
+            "format": "uuid"
+          },
+          "linear_dist": {
+            "title": "Linear Distance Move increments in mm",
+            "maximum": 100000,
+            "minimum": 1,
+            "type": "integer",
+            "default": 15
+          },
+          "max_iterations": {
+            "title": "Number of laser measurements to wait for valid data",
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer",
+            "default": 1
+          },
+          "deg_per_move": {
+            "title": "Degrees to move per step.  Larger movements will be broken up into this sized move",
+            "maximum": 180,
+            "minimum": 0,
+            "type": "number",
+            "default": 180
+          },
+          "deg_per_second": {
+            "title": "Degrees to move per second. Speed of the motors",
+            "maximum": 25,
+            "minimum": 5,
+            "type": "number",
+            "default": 15
+          },
+          "deg_per_scan_image": {
+            "title": "Degrees between scan images.",
+            "maximum": 180,
+            "minimum": 0,
+            "type": "number",
+            "default": 30
+          },
+          "tripod": {
+            "title": "Cartesian coordinates of tripod",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/XYZPosition"
+              }
+            ],
+            "default": {
+              "x": 0,
+              "y": 0,
+              "z": -1
+            }
+          },
+          "max_x": {
+            "title": "Max X dimension (Right) in METERS",
+            "maximum": 30,
+            "minimum": 0,
+            "type": "number",
+            "default": 1
+          },
+          "min_x": {
+            "title": "Min X dimension (Left) in METERS",
+            "maximum": 0,
+            "minimum": -30,
+            "type": "number",
+            "default": -1
+          },
+          "max_y": {
+            "title": "Max Y dimension (Forward) in METERS",
+            "maximum": 30,
+            "minimum": 0,
+            "type": "number",
+            "default": 3
+          },
+          "min_y": {
+            "title": "Min Y dimension (Backwards) in METERS",
+            "maximum": 5,
+            "minimum": -30,
+            "type": "number",
+            "default": 0
+          },
+          "automated_radius": {
+            "title": "Radius of automated circles in METERS",
+            "maximum": 5,
+            "minimum": 0.01,
+            "type": "number",
+            "default": 0.5
+          },
+          "automated_step_on_arc": {
+            "title": "Step on automated circles in METERS",
+            "maximum": 1,
+            "minimum": 0.001,
+            "type": "number",
+            "default": 0.05
+          }
+        }
+      },
+      "ScannerScanState": {
+        "title": "ScannerScanState",
+        "enum": [
+          "none",
+          "calibration",
+          "perimeter",
+          "automated_ready_to_start",
+          "automated_in_progress",
+          "automated_complete",
+          "feature"
+        ],
+        "type": "string",
+        "description": "The state of the scan workflow.\n\n- `none` - is deprecated as of v0.0.10 and will no longer be used."
+      },
+      "ScannerVersion": {
+        "title": "ScannerVersion",
+        "required": [
+          "softwareVersion",
+          "apiVersion"
+        ],
+        "type": "object",
+        "properties": {
+          "softwareVersion": {
+            "title": "Softwareversion",
+            "type": "string"
+          },
+          "apiVersion": {
+            "title": "Apiversion",
+            "type": "string"
+          }
+        }
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        }
+      },
+      "XYZPosition": {
+        "title": "XYZPosition",
+        "type": "object",
+        "properties": {
+          "x": {
+            "title": "X Plane position in meters relative to origin",
+            "type": "number",
+            "default": 0
+          },
+          "y": {
+            "title": "Y Plane position in meters relative to origin",
+            "type": "number",
+            "default": 0
+          },
+          "z": {
+            "title": "Z Plane position in meters relative to origin",
+            "type": "number",
+            "default": 0
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "scanner",
+      "description": "General information about the overall scanner and hardware"
+    },
+    {
+      "name": "move",
+      "description": "Requests related to the movement in the current state"
+    },
+    {
+      "name": "current",
+      "description": "Requests related to the movement, images and data in the current state"
+    },
+    {
+      "name": "projects",
+      "description": "Projects encapsulate all the information about scans, resources and features"
+    },
+    {
+      "name": "scans",
+      "description": "Scans allow the addition of new points and images"
+    },
+    {
+      "name": "features",
+      "description": "Features define unique things within a scan about a project"
+    },
+    {
+      "name": "resources",
+      "description": "Resources are the data information from scans and projects (e.g. images, point clouds and measurements)"
+    }
+  ]
+}

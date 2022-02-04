@@ -1,0 +1,74 @@
+package {{packageName}}.network
+
+import io.ktor.client.HttpClient
+import io.ktor.client.call.receive
+import io.ktor.client.request.header
+import io.ktor.client.request.parameter
+import io.ktor.client.request.request
+import io.ktor.client.request.url
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.HttpMethod
+import io.ktor.util.toMap
+
+object AndroidNetworking {
+    val client = HttpClient()
+}
+
+actual suspend fun nativeRequest(
+    requestConfig: RequestConfig,
+    body: ByteArray?,
+    log: NetworkLogger
+): Response {
+
+    val httpResponse: HttpResponse = AndroidNetworking.client.request {
+        // Setup path
+        this.url(requestConfig.path)
+
+        // Map query items
+        requestConfig.query.flatMap { entry ->
+        entry.value.map { Pair(entry.key, it) }
+    }.map {
+        this.parameter(it.first, it.second)
+    }
+
+    // Set the method
+    this.method = when (requestConfig.method) {
+        RequestMethod.GET -> HttpMethod.Get
+        RequestMethod.DELETE -> HttpMethod.Delete
+        RequestMethod.HEAD -> HttpMethod.Head
+        RequestMethod.OPTIONS -> HttpMethod.Options
+        RequestMethod.PATCH -> HttpMethod.Patch
+        RequestMethod.POST -> HttpMethod.Post
+        RequestMethod.PUT -> HttpMethod.Put
+    }
+
+    // Add all headers
+    requestConfig.headers.forEach {
+        this.header(it.key, it.value)
+    }
+    body?.also {
+        this.body = it
+    }
+
+    log.request(
+        method = requestConfig.method,
+        absoluteUrl = this.url.toString(),
+        headers = requestConfig.headers,
+        body = body)
+    }
+
+    val response = Response(
+        code = httpResponse.status.value,
+        headers = httpResponse.headers.toMap().mapValues { it.value.first() },
+        body = httpResponse.receive()
+    )
+
+    log.response(
+        method = requestConfig.method,
+        absoluteUrl = requestConfig.path,
+        failureDescription = null,
+        response = response
+    )
+
+    return response
+}

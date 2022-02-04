@@ -1,0 +1,5186 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Bright Cloud API",
+    "description": "Bright cloud API interface for the mobile app and admin portal to interact with.",
+    "version": "0.9.20",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "User",
+      "description": "User information"
+    },
+    {
+      "name": "Project",
+      "description": "AI Measure project management"
+    },
+    {
+      "name": "Resource",
+      "description": "Project Resource management"
+    },
+    {
+      "name": "Scan",
+      "description": "Laser Scan management"
+    }
+  ],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "access-token": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "KillSwitchRequest": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "example": "tvOS"
+          },
+          "model": {
+            "type": "string",
+            "example": "AppleTV6,2"
+          },
+          "osVersion": {
+            "type": "string",
+            "example": "14.0.1"
+          },
+          "appVersion": {
+            "type": "string",
+            "example": "1.0.0"
+          }
+        },
+        "required": [
+          "platform",
+          "model",
+          "osVersion",
+          "appVersion"
+        ]
+      },
+      "KillSwitchResponse": {
+        "type": "object",
+        "properties": {
+          "isSupported": {
+            "type": "boolean",
+            "default": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true,
+            "example": "New Version Available"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true,
+            "example": "This version is no longer supported. Please update to the latest version."
+          }
+        },
+        "required": [
+          "isSupported",
+          "title",
+          "message"
+        ]
+      },
+      "Distributor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "code",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PageMetadata": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 1,
+            "description": "The number of results in this payload."
+          },
+          "currentPage": {
+            "type": "integer",
+            "example": 1,
+            "description": "The current page index."
+          },
+          "totalCount": {
+            "type": "integer",
+            "example": 1,
+            "description": "The total number of results available."
+          },
+          "totalPages": {
+            "type": "integer",
+            "example": 1,
+            "description": "The total number of pages available."
+          }
+        },
+        "required": [
+          "count",
+          "currentPage"
+        ]
+      },
+      "DistributorListWrapper": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Distributor"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        },
+        "required": [
+          "data",
+          "metadata"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "dealerId": {
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "technician",
+              "buyer",
+              "admin",
+              "super_admin",
+              "bright_admin"
+            ],
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "phone",
+          "name",
+          "dealerId",
+          "role",
+          "isActive",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the user.",
+            "example": "5917e613-c704-4148-92f1-fe83046877f4"
+          },
+          "email": {
+            "type": "string",
+            "description": "email",
+            "example": "matt@abba.net"
+          },
+          "phone": {
+            "type": "string",
+            "description": "phone",
+            "example": "415-777-7777"
+          },
+          "name": {
+            "type": "string",
+            "description": "name",
+            "example": "Matt Marty"
+          },
+          "dealerId": {
+            "type": "string",
+            "description": "dealer id",
+            "example": "1daaa54e-c46d-4c55-88c2-29b3d32a2ba3"
+          },
+          "role": {
+            "type": "string",
+            "description": "Role : admin|user|super_user",
+            "example": "admin"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "is active?",
+            "example": true
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "phone",
+          "name",
+          "dealerId",
+          "role",
+          "isActive"
+        ]
+      },
+      "ResourceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID of the resource. (rovided by mobile or scanner)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the resource."
+          },
+          "updateTime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Resource update time by device"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID of the resource associated project."
+          },
+          "scanId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid",
+            "description": "ID of the resource associated scan. Optional if the resource is associated to a scan instead of the project"
+          },
+          "revision": {
+            "type": "integer",
+            "description": "Revision of the resource"
+          },
+          "type": {
+            "enum": [
+              "scanner image",
+              "user image",
+              "raw point cloud",
+              "cartesian point cloud",
+              "mobile point cloud",
+              "feature point cloud",
+              "measurement",
+              "log",
+              "unknown"
+            ],
+            "type": "string",
+            "description": "The type of resource"
+          },
+          "captureSource": {
+            "enum": [
+              "laser",
+              "mobile",
+              "other",
+              "unknown",
+              "portal"
+            ],
+            "type": "string",
+            "description": "The capture method for this resource"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "The mime type of resource content"
+          },
+          "tags": {
+            "nullable": true,
+            "description": "tags",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "updateTime",
+          "projectId",
+          "scanId",
+          "revision",
+          "type",
+          "captureSource",
+          "mimeType",
+          "tags"
+        ]
+      },
+      "ResourceWithUrlDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID of the resource. (rovided by mobile or scanner)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the resource."
+          },
+          "updateTime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Resource update time by device"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID of the resource associated project."
+          },
+          "scanId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid",
+            "description": "ID of the resource associated scan. Optional if the resource is associated to a scan instead of the project"
+          },
+          "revision": {
+            "type": "integer",
+            "description": "Revision of the resource"
+          },
+          "type": {
+            "enum": [
+              "scanner image",
+              "user image",
+              "raw point cloud",
+              "cartesian point cloud",
+              "mobile point cloud",
+              "feature point cloud",
+              "measurement",
+              "log",
+              "unknown"
+            ],
+            "type": "string",
+            "description": "The type of resource"
+          },
+          "captureSource": {
+            "enum": [
+              "laser",
+              "mobile",
+              "other",
+              "unknown",
+              "portal"
+            ],
+            "type": "string",
+            "description": "The capture method for this resource"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "The mime type of resource content"
+          },
+          "tags": {
+            "nullable": true,
+            "description": "tags",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "enum": [
+              "uploaded",
+              "pending",
+              "upload_failed"
+            ],
+            "type": "string",
+            "description": "Scan status : active|inactive",
+            "example": "pending"
+          },
+          "url": {
+            "type": "string",
+            "description": "Url to the resource object"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "updateTime",
+          "projectId",
+          "scanId",
+          "revision",
+          "type",
+          "captureSource",
+          "mimeType",
+          "tags",
+          "status",
+          "url"
+        ]
+      },
+      "ResourceBase64Dto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "base64 encoded string : example is PNG image",
+            "example": "Mi4wLDAuMCwwCjQuMCwxLjAsMAo0LjAsMy4wLDAKMi4wLDQuMCwwCjAuMCwzLjAsMAowLjAsMS4wLDAK"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "Resource": {
+        "type": "object",
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "default": 0
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "scanId": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "scanner image",
+              "user image",
+              "raw point cloud",
+              "cartesian point cloud",
+              "mobile point cloud",
+              "feature point cloud",
+              "measurement",
+              "log",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "captureSource": {
+            "enum": [
+              "laser",
+              "mobile",
+              "other",
+              "unknown",
+              "portal"
+            ],
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "uploaded",
+              "pending",
+              "upload_failed"
+            ],
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "updateTime": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "revision",
+          "id",
+          "name",
+          "projectId",
+          "scanId",
+          "type",
+          "captureSource",
+          "mimeType",
+          "status",
+          "tags",
+          "updateTime",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ProjectCustomerDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Customer Name",
+            "example": "firstname lastname"
+          },
+          "email": {
+            "type": "string",
+            "description": "Customer Email",
+            "example": "somebody@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Customer Phone",
+            "example": "415-123-4567"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "phone"
+        ]
+      },
+      "ProjectAddressDto": {
+        "type": "object",
+        "properties": {
+          "address1": {
+            "type": "string",
+            "description": "Address Line 1",
+            "example": "123 Broadway"
+          },
+          "address2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Address Line 2",
+            "example": ""
+          },
+          "city": {
+            "type": "string",
+            "description": "Address City",
+            "example": "New York"
+          },
+          "state": {
+            "type": "string",
+            "description": "Address State",
+            "example": "NY"
+          },
+          "postalcode": {
+            "type": "string",
+            "description": "Postal Code",
+            "example": "10006"
+          },
+          "country": {
+            "type": "string",
+            "description": "Address Country",
+            "example": "United States"
+          }
+        },
+        "required": [
+          "address1",
+          "address2",
+          "city",
+          "state",
+          "postalcode",
+          "country"
+        ]
+      },
+      "ProjectLocationDto": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "nullable": true,
+            "type": "number",
+            "description": "Latitude",
+            "example": 38.8899389
+          },
+          "longitude": {
+            "nullable": true,
+            "type": "number",
+            "description": "Longitude",
+            "example": -77.0112392
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      },
+      "ScanLocationDto": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "nullable": true,
+            "type": "number",
+            "description": "Latitude",
+            "example": 38.8888888
+          },
+          "longitude": {
+            "nullable": true,
+            "type": "number",
+            "description": "Longitude",
+            "example": -77.0111111
+          }
+        },
+        "required": [
+          "latitude",
+          "longitude"
+        ]
+      },
+      "ScanDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the scan.",
+            "example": "D3AEEBB4-38F5-45D6-AD3D-1C153A8D4FE8"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the associated project.",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065"
+          },
+          "startTime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The time when the scan was started."
+          },
+          "endTime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The time when the scan completed."
+          },
+          "location": {
+            "nullable": true,
+            "description": "Scan location info",
+            "example": {
+              "latitude": 38.87654321,
+              "longitude": -77.01234567
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScanLocationDto"
+              }
+            ]
+          },
+          "resources": {
+            "nullable": true,
+            "example": [
+              {
+                "id": "33333333-3333-3333-3333-333333333333",
+                "name": "scan-resource-scanner-image",
+                "projectId": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+                "scanId": "D3AEEBB4-38F5-45D6-AD3D-1C153A8D4FE8",
+                "revision": 0,
+                "type": "scanner image",
+                "captureSource": "laser",
+                "mimeType": "image/png",
+                "tags": [],
+                "updateTime": "2021-12-01T17:52:47.978Z"
+              }
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResourceDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "projectId",
+          "startTime",
+          "endTime",
+          "location",
+          "resources"
+        ]
+      },
+      "ScanOfFeatureDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the scan of feature (feature.scans)",
+            "example": "55ED263B-1C82-4C81-8F27-7BE0F5C71455"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the associated project.",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065"
+          },
+          "startTime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The time when the scan was started."
+          },
+          "endTime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The time when the scan completed."
+          },
+          "location": {
+            "nullable": true,
+            "description": "Scan location info",
+            "example": {
+              "latitude": 38.87654321,
+              "longitude": -77.01234567
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ScanLocationDto"
+              }
+            ]
+          },
+          "resources": {
+            "nullable": true,
+            "example": [
+              {
+                "id": "33333333-3333-3333-3333-333333333333",
+                "name": "scan-resource-scanner-image",
+                "projectId": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+                "scanId": "D3AEEBB4-38F5-45D6-AD3D-1C153A8D4FE8",
+                "revision": 0,
+                "type": "scanner image",
+                "captureSource": "laser",
+                "mimeType": "image/png",
+                "tags": [],
+                "updateTime": "2021-12-01T17:52:47.978Z"
+              }
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResourceDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "projectId",
+          "startTime",
+          "endTime",
+          "location",
+          "resources"
+        ]
+      },
+      "FeatureDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the feature.",
+            "example": "BC28A30B-AA11-4E49-84F3-FAADC357E653"
+          },
+          "type": {
+            "type": "string",
+            "description": "Feature type",
+            "example": "Perimeter"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the associated project.",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065"
+          },
+          "updateTime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Update time."
+          },
+          "scans": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScanOfFeatureDto"
+            }
+          },
+          "resources": {
+            "nullable": true,
+            "example": [
+              {
+                "id": "22222222-2222-2222-2222-222222222222",
+                "name": "feature-resource-cartisian-dxf-test",
+                "projectId": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+                "scanId": "D3AEEBB4-38F5-45D6-AD3D-1C153A8D4FE8",
+                "revision": 0,
+                "type": "cartesian point cloud",
+                "captureSource": "laser",
+                "mimeType": "text/plain",
+                "tags": [
+                  "cartisian to create dxf resource"
+                ],
+                "updateTime": "2021-12-01T17:52:47.979Z"
+              }
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResourceDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "projectId",
+          "updateTime",
+          "scans",
+          "resources"
+        ]
+      },
+      "ProjectBaseDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The friendly name of the project.",
+            "example": "project-1638381167980"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "completed",
+              "deleted",
+              "inactive"
+            ],
+            "type": "string",
+            "description": "Project Status",
+            "example": "active"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the user creating the project.",
+            "example": "148a8c99-2586-4404-9b3e-710570af1360"
+          },
+          "dealerId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the dealer associated with the project.",
+            "example": "7739fc7a-8749-4873-930a-db76cde304ec"
+          },
+          "customer": {
+            "description": "Customer Information",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectCustomerDto"
+              }
+            ]
+          },
+          "address": {
+            "description": "Project address Information",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectAddressDto"
+              }
+            ]
+          },
+          "location": {
+            "nullable": true,
+            "description": "Project location Information",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectLocationDto"
+              }
+            ]
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true,
+            "description": "Any notes about the project."
+          },
+          "scans": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScanDto"
+            }
+          },
+          "resources": {
+            "nullable": true,
+            "example": [
+              {
+                "id": "11111111-1111-1111-1111-111111111111",
+                "name": "project-resource-mobile-user-image",
+                "projectId": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+                "scanId": "D3AEEBB4-38F5-45D6-AD3D-1C153A8D4FE8",
+                "revision": 0,
+                "type": "user image",
+                "captureSource": "laser",
+                "mimeType": "image/png",
+                "tags": [
+                  "project resource"
+                ],
+                "updateTime": "2021-12-01T17:52:47.981Z"
+              }
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResourceDto"
+            }
+          },
+          "features": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeatureDto"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "status",
+          "userId",
+          "dealerId",
+          "customer",
+          "address",
+          "location",
+          "notes",
+          "scans",
+          "resources",
+          "features"
+        ]
+      },
+      "ProjectDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The friendly name of the project.",
+            "example": "project-1638381167980"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "completed",
+              "deleted",
+              "inactive"
+            ],
+            "type": "string",
+            "description": "Project Status",
+            "example": "active"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the user creating the project.",
+            "example": "148a8c99-2586-4404-9b3e-710570af1360"
+          },
+          "dealerId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the dealer associated with the project.",
+            "example": "7739fc7a-8749-4873-930a-db76cde304ec"
+          },
+          "customer": {
+            "description": "Customer Information",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectCustomerDto"
+              }
+            ]
+          },
+          "address": {
+            "description": "Project address Information",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectAddressDto"
+              }
+            ]
+          },
+          "location": {
+            "nullable": true,
+            "description": "Project location Information",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectLocationDto"
+              }
+            ]
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true,
+            "description": "Any notes about the project."
+          },
+          "scans": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScanDto"
+            }
+          },
+          "resources": {
+            "nullable": true,
+            "example": [
+              {
+                "id": "11111111-1111-1111-1111-111111111111",
+                "name": "project-resource-mobile-user-image",
+                "projectId": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+                "scanId": "D3AEEBB4-38F5-45D6-AD3D-1C153A8D4FE8",
+                "revision": 0,
+                "type": "user image",
+                "captureSource": "laser",
+                "mimeType": "image/png",
+                "tags": [
+                  "project resource"
+                ],
+                "updateTime": "2021-12-01T17:52:47.981Z"
+              }
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResourceDto"
+            }
+          },
+          "features": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FeatureDto"
+            }
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the project."
+          }
+        },
+        "required": [
+          "name",
+          "status",
+          "userId",
+          "dealerId",
+          "customer",
+          "address",
+          "location",
+          "notes",
+          "id"
+        ]
+      },
+      "ProjectListWrapper": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectDto"
+            }
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        },
+        "required": [
+          "data",
+          "metadata"
+        ]
+      },
+      "Project": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "completed",
+              "deleted",
+              "inactive"
+            ]
+          },
+          "dealerId": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "customerEmail": {
+            "type": "string"
+          },
+          "customerPhone": {
+            "type": "string"
+          },
+          "addressAddress1": {
+            "type": "string"
+          },
+          "addressAddress2": {
+            "type": "string"
+          },
+          "addressCity": {
+            "type": "string"
+          },
+          "addressState": {
+            "type": "string"
+          },
+          "addressPostalcode": {
+            "type": "string"
+          },
+          "addressCountry": {
+            "type": "string"
+          },
+          "locationLatitude": {
+            "type": "number"
+          },
+          "locationLongitude": {
+            "type": "number"
+          },
+          "scanIdList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resourceIdList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "featureIdList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "status",
+          "dealerId",
+          "notes",
+          "userId",
+          "customerName",
+          "customerEmail",
+          "customerPhone",
+          "addressAddress1",
+          "addressAddress2",
+          "addressCity",
+          "addressState",
+          "addressPostalcode",
+          "addressCountry",
+          "locationLatitude",
+          "locationLongitude",
+          "scanIdList",
+          "resourceIdList",
+          "featureIdList",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ResourceWithUrl": {
+        "type": "object",
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "default": 0
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "scanId": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "scanner image",
+              "user image",
+              "raw point cloud",
+              "cartesian point cloud",
+              "mobile point cloud",
+              "feature point cloud",
+              "measurement",
+              "log",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "captureSource": {
+            "enum": [
+              "laser",
+              "mobile",
+              "other",
+              "unknown",
+              "portal"
+            ],
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "uploaded",
+              "pending",
+              "upload_failed"
+            ],
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "updateTime": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "revision",
+          "id",
+          "name",
+          "projectId",
+          "scanId",
+          "type",
+          "captureSource",
+          "mimeType",
+          "status",
+          "tags",
+          "updateTime",
+          "createdAt",
+          "updatedAt",
+          "url"
+        ]
+      },
+      "OrderProduct": {
+        "type": "object",
+        "properties": {
+          "partner": {
+            "type": "string",
+            "description": "Purchase Partner",
+            "example": "dummy_partner_1",
+            "enum": [
+              "dummy_partner_1",
+              "dummy_partner_2",
+              "this is just a dummy"
+            ]
+          },
+          "brand": {
+            "type": "string",
+            "description": "Brand",
+            "enum": [
+              "US",
+              "Premier",
+              "CA"
+            ]
+          },
+          "fabric": {
+            "type": "string",
+            "description": "Matrial Fabric",
+            "example": "Solid",
+            "enum": [
+              "Solid",
+              "Mesh"
+            ]
+          },
+          "colorAndPattern": {
+            "type": "string",
+            "description": "Color and pattern (swatch file name)",
+            "example": "1000V_Full-Weight-Solid_Blue",
+            "enum": [
+              "1000V_Full-Weight-Solid_Blue",
+              "1000V_Full-Weight-Solid_Green",
+              "1000V_Full-Weight-Solid_Grey",
+              "1000V_Full-Weight-Solid_Tan",
+              "5000M_Standard-Mesh_Blue",
+              "5000M_Standard-Mesh_Green",
+              "5000M_Standard-Mesh_Grey",
+              "5000M_Standard-Mesh_Tan",
+              "500P_Lite-Solid_Blue",
+              "500P_Lite-Solid_Green",
+              "7000MS_High-Shade-Mesh_Blue",
+              "7000MS_High-Shade-Mesh_Green",
+              "7000MS_High-Shade-Mesh_Grey",
+              "7000MS_High-Shade-Mesh_Tan",
+              "9000MX_Max-Shade-Mesh_Black"
+            ]
+          }
+        },
+        "required": [
+          "partner",
+          "brand",
+          "fabric",
+          "colorAndPattern"
+        ]
+      },
+      "OrderSteps": {
+        "type": "object",
+        "properties": {
+          "step_short_qty": {
+            "type": "integer",
+            "description": "Step w/pads <= 8'",
+            "maximum": 99,
+            "minimum": 0,
+            "example": 0,
+            "format": "{\"activated\":true}"
+          },
+          "step_long_qty": {
+            "type": "integer",
+            "description": "Step w/pads > 8'",
+            "maximum": 99,
+            "minimum": 0,
+            "example": 0,
+            "format": "{\"activated\":true}"
+          }
+        },
+        "required": [
+          "step_short_qty",
+          "step_long_qty"
+        ]
+      },
+      "OrderFullPerimeterAnchors": {
+        "type": "object",
+        "properties": {
+          "lawnTubes": {
+            "type": "boolean",
+            "description": "Lawn Tubes",
+            "example": false
+          },
+          "deckTubes": {
+            "type": "boolean",
+            "description": "Deck Tubes",
+            "example": false
+          },
+          "rdmSystem": {
+            "type": "boolean",
+            "description": "RDM system",
+            "example": false
+          },
+          "woodDeckAnchors": {
+            "type": "boolean",
+            "description": "Wood Deck Anchors",
+            "example": false
+          },
+          "brassCollars": {
+            "type": "boolean",
+            "description": "Brass Collars",
+            "example": false
+          },
+          "buckles": {
+            "type": "boolean",
+            "description": "Buckles",
+            "example": false
+          },
+          "longBrassAnchors": {
+            "type": "boolean",
+            "description": "Long Brass Anchors",
+            "example": false
+          },
+          "noAnchors": {
+            "type": "boolean",
+            "description": "No Anchors",
+            "example": false
+          }
+        },
+        "required": [
+          "lawnTubes",
+          "deckTubes",
+          "rdmSystem",
+          "woodDeckAnchors",
+          "brassCollars",
+          "buckles",
+          "longBrassAnchors",
+          "noAnchors"
+        ]
+      },
+      "OrderPartialPerimeterAnchors": {
+        "type": "object",
+        "properties": {
+          "lawnTubes": {
+            "type": "integer",
+            "description": "Lawn Tubes",
+            "example": 0,
+            "format": "{\"activated\":true}"
+          },
+          "deckTubes": {
+            "type": "integer",
+            "description": "Deck Tubes",
+            "example": 0,
+            "format": "{\"activated\":true}"
+          },
+          "rdmSystem": {
+            "type": "integer",
+            "description": "RDM system",
+            "example": 0,
+            "format": "{\"activated\":true}"
+          },
+          "woodDeckAnchors": {
+            "type": "integer",
+            "description": "Wood Deck Anchors",
+            "example": 0,
+            "format": "{\"activated\":true}"
+          },
+          "brassCollars": {
+            "type": "integer",
+            "description": "Brass Collars",
+            "example": 0,
+            "format": "{\"activated\":true}"
+          }
+        },
+        "required": [
+          "lawnTubes",
+          "deckTubes",
+          "rdmSystem",
+          "woodDeckAnchors",
+          "brassCollars"
+        ]
+      },
+      "OrderFasteningSystem": {
+        "type": "object",
+        "properties": {
+          "extensionStraps": {
+            "type": "integer",
+            "description": "Extension Straps",
+            "example": 0,
+            "nullable": true
+          },
+          "topAndBottomWebbing": {
+            "type": "integer",
+            "description": "Top and Bottom Webbing",
+            "example": 0,
+            "nullable": true
+          },
+          "y_StrapAssembly": {
+            "type": "integer",
+            "description": "Y-Strap Assembly",
+            "example": 0,
+            "nullable": true
+          },
+          "cableHardwareKit": {
+            "type": "integer",
+            "description": "Cable Hardware Kit",
+            "example": 0,
+            "nullable": true
+          },
+          "coatedStainlessSteelCable": {
+            "type": "integer",
+            "description": "Coated Stainless Steel Cable",
+            "example": 0,
+            "nullable": true
+          },
+          "raisedWall_SSFlushWallAnchor": {
+            "type": "integer",
+            "description": "Raised Wall - SS Flush Wall Anchor",
+            "example": 0,
+            "nullable": true
+          },
+          "raisedWall_EyeBolts": {
+            "type": "integer",
+            "description": "Raised Wall - Eye Bolts",
+            "example": 0,
+            "nullable": true
+          },
+          "raisedWall_2inchThunderboltWithCableMateHead": {
+            "type": "integer",
+            "description": "Raised Wall - 2\" Thunderbolt w/ Cable Mate Head",
+            "example": 0,
+            "nullable": true
+          },
+          "raisedWall_6inchThunderboltWithCableMateHead": {
+            "type": "integer",
+            "description": "Raised Wall - 6\" Thunderbolt w/ Cable Mate Head",
+            "example": 0,
+            "nullable": true
+          }
+        },
+        "required": [
+          "extensionStraps",
+          "topAndBottomWebbing",
+          "y_StrapAssembly",
+          "cableHardwareKit",
+          "coatedStainlessSteelCable",
+          "raisedWall_SSFlushWallAnchor",
+          "raisedWall_EyeBolts",
+          "raisedWall_2inchThunderboltWithCableMateHead",
+          "raisedWall_6inchThunderboltWithCableMateHead"
+        ]
+      },
+      "OrderPadding": {
+        "type": "object",
+        "properties": {
+          "perimeterPaddingSewnOn": {
+            "type": "integer",
+            "description": "Perimeter Padding (sewn on)",
+            "example": 0,
+            "format": "{\"activated\":true}"
+          },
+          "replaceablePerimeterPadding": {
+            "type": "integer",
+            "description": "Replaceable Perimeter Padding (velcro)",
+            "example": 0,
+            "format": "{\"activated\":true}"
+          },
+          "perimeterPadding2x20Loose": {
+            "type": "integer",
+            "description": "Perimeter Padding (2' x 20' loose)",
+            "example": 0,
+            "format": "{\"activated\":true}"
+          },
+          "reverseCornerNosePad": {
+            "type": "integer",
+            "description": "Reverse Corner/Nose Pad (2'x2' sewn on)",
+            "example": 0,
+            "format": "{\"activated\":true}"
+          }
+        },
+        "required": [
+          "perimeterPaddingSewnOn",
+          "replaceablePerimeterPadding",
+          "perimeterPadding2x20Loose",
+          "reverseCornerNosePad"
+        ]
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "dealerId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "editing",
+              "proofing",
+              "ordered",
+              "delivered"
+            ],
+            "type": "string"
+          },
+          "product": {
+            "$ref": "#/components/schemas/OrderProduct"
+          },
+          "steps": {
+            "$ref": "#/components/schemas/OrderSteps"
+          },
+          "fullPerimeterAnchors": {
+            "$ref": "#/components/schemas/OrderFullPerimeterAnchors"
+          },
+          "partialPerimeterAnchors": {
+            "$ref": "#/components/schemas/OrderPartialPerimeterAnchors"
+          },
+          "fasteningSystem": {
+            "$ref": "#/components/schemas/OrderFasteningSystem"
+          },
+          "padding": {
+            "$ref": "#/components/schemas/OrderPadding"
+          }
+        },
+        "required": [
+          "id",
+          "dealerId",
+          "createdAt",
+          "updatedAt",
+          "projectId",
+          "status",
+          "product",
+          "steps",
+          "fullPerimeterAnchors",
+          "partialPerimeterAnchors",
+          "fasteningSystem",
+          "padding"
+        ]
+      },
+      "EmployeeDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name"
+          },
+          "email": {
+            "type": "string",
+            "description": "email : MUST BE UNIQUE"
+          },
+          "phone": {
+            "type": "string",
+            "description": "phone#",
+            "example": "123-456-7890"
+          },
+          "role": {
+            "enum": [
+              "technician",
+              "buyer",
+              "admin"
+            ],
+            "type": "string",
+            "description": "Employee Role: technitian|buyer|admin|"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "phone",
+          "role",
+          "isActive"
+        ]
+      },
+      "Dealer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive",
+              "archived"
+            ]
+          },
+          "email": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "pictureUrl": {
+            "type": "string"
+          },
+          "primaryUserId": {
+            "type": "string"
+          },
+          "rewardsId": {
+            "type": "string"
+          },
+          "addressAddress1": {
+            "type": "string"
+          },
+          "addressAddress2": {
+            "type": "string"
+          },
+          "addressCity": {
+            "type": "string"
+          },
+          "addressState": {
+            "type": "string"
+          },
+          "addressPostalcode": {
+            "type": "string"
+          },
+          "addressCountry": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "status",
+          "email",
+          "url",
+          "phone",
+          "pictureUrl",
+          "primaryUserId",
+          "rewardsId",
+          "addressAddress1",
+          "addressAddress2",
+          "addressCity",
+          "addressState",
+          "addressPostalcode",
+          "addressCountry",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "DealerAddressDto": {
+        "type": "object",
+        "properties": {
+          "address1": {
+            "type": "string",
+            "description": "Address Line 1",
+            "example": "1000 Vin Scully Ave"
+          },
+          "address2": {
+            "type": "string",
+            "nullable": true,
+            "description": "Address Line 2",
+            "example": ""
+          },
+          "city": {
+            "type": "string",
+            "description": "Address City",
+            "example": "Los Angeles"
+          },
+          "state": {
+            "type": "string",
+            "description": "Address State",
+            "example": "CA"
+          },
+          "postalcode": {
+            "type": "string",
+            "description": "Postal Code",
+            "example": "90012"
+          },
+          "country": {
+            "type": "string",
+            "description": "Address Country",
+            "example": "United States"
+          }
+        },
+        "required": [
+          "address1",
+          "address2",
+          "city",
+          "state",
+          "postalcode",
+          "country"
+        ]
+      },
+      "DealerDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The ID of the dealer.",
+            "example": "1daaa54e-c46d-4c55-88c2-29b3d32a2ba3"
+          },
+          "name": {
+            "type": "string",
+            "description": "The dealer name",
+            "example": "Dodger Pool"
+          },
+          "status": {
+            "type": "string",
+            "description": "The dealer Status",
+            "example": "active"
+          },
+          "email": {
+            "type": "string",
+            "example": "paul@dogerpool.com"
+          },
+          "url": {
+            "type": "string",
+            "example": "https://example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "(866) 363-4377"
+          },
+          "pictureUrl": {
+            "type": "string",
+            "example": "http://example.com/image/company_image.png"
+          },
+          "primaryUserId": {
+            "type": "string",
+            "example": "47171377-45A0-492A-9F4F-792B5501D318"
+          },
+          "rewardsId": {
+            "type": "string",
+            "nullable": true,
+            "example": ""
+          },
+          "address": {
+            "nullable": true,
+            "description": "Dealer address Information",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DealerAddressDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "status",
+          "email",
+          "url",
+          "phone",
+          "pictureUrl",
+          "primaryUserId",
+          "rewardsId",
+          "address"
+        ]
+      },
+      "Swatch": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "brand": {
+            "enum": [
+              "CA",
+              "US",
+              "Premier"
+            ],
+            "type": "string"
+          },
+          "pattern": {
+            "enum": [
+              "500P",
+              "1000V",
+              "5000M",
+              "7000MS",
+              "9000MX"
+            ],
+            "type": "string"
+          },
+          "color": {
+            "enum": [
+              "Green",
+              "Blue",
+              "Grey",
+              "Tan",
+              "Black"
+            ],
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "brand",
+          "pattern",
+          "color",
+          "url",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "OrderBase": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "editing",
+              "proofing",
+              "ordered",
+              "delivered"
+            ],
+            "type": "string"
+          },
+          "product": {
+            "$ref": "#/components/schemas/OrderProduct"
+          },
+          "steps": {
+            "$ref": "#/components/schemas/OrderSteps"
+          },
+          "fullPerimeterAnchors": {
+            "$ref": "#/components/schemas/OrderFullPerimeterAnchors"
+          },
+          "partialPerimeterAnchors": {
+            "$ref": "#/components/schemas/OrderPartialPerimeterAnchors"
+          },
+          "fasteningSystem": {
+            "$ref": "#/components/schemas/OrderFasteningSystem"
+          },
+          "padding": {
+            "$ref": "#/components/schemas/OrderPadding"
+          }
+        },
+        "required": [
+          "projectId",
+          "status",
+          "product",
+          "steps",
+          "fullPerimeterAnchors",
+          "partialPerimeterAnchors",
+          "fasteningSystem",
+          "padding"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/client/kill-switch": {
+      "post": {
+        "operationId": "KillSwitchController_check",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KillSwitchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KillSwitchResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/authz/login": {
+      "get": {
+        "operationId": "AuthzController_login",
+        "parameters": [
+          {
+            "name": "redirect_uri",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/authz/logout": {
+      "get": {
+        "operationId": "AuthzController_logout",
+        "parameters": [
+          {
+            "name": "redirect_uri",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/authz/callback": {
+      "get": {
+        "operationId": "AuthzController_callback",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/portal/api/v1/distributors": {
+      "get": {
+        "operationId": "DistributorController_findWithLimitAndPage",
+        "summary": "Gets all distributors.",
+        "description": "Gets all distributors",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "example": 10,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DistributorListWrapper"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Distributor"
+        ]
+      }
+    },
+    "/portal/api/v1/distributors/mine": {
+      "get": {
+        "operationId": "DistributorController_findMine",
+        "summary": "Gets my distributors.",
+        "description": "Gets distributors associated with my dealer",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Distributor"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Distributor"
+        ]
+      }
+    },
+    "/portal/api/v1/distributors/mine/{code}": {
+      "put": {
+        "operationId": "DistributorController_addMine",
+        "summary": "Link a distributor by code.",
+        "description": "Link a distributor associated my dealer",
+        "parameters": [
+          {
+            "name": "isdefault",
+            "required": false,
+            "in": "query",
+            "example": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "description": "The distributor CODE to add",
+            "example": "FADE1234",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Distributor"
+        ]
+      },
+      "delete": {
+        "operationId": "DistributorController_deleteMine",
+        "summary": "Unlink a distributor by code.",
+        "description": "Unlink the distributor associated my dealer",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "description": "The distributor CODE to add",
+            "example": "FADE1234",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Distributor"
+        ]
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "operationId": "UserController_getDeviceUserProfile",
+        "summary": "Get device api user info.",
+        "description": "Get device api access user info from device created JWT token (this is just for debug use)",
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present.",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/portal/api/v1/users/me": {
+      "get": {
+        "operationId": "UserController_getProfile",
+        "summary": "Get login user info.",
+        "description": "Get auth0 login user info.",
+        "parameters": [
+          {
+            "name": "verbose",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User"
+        ]
+      },
+      "put": {
+        "operationId": "UserController_upsertMe",
+        "summary": "Put my info.",
+        "description": "Put my (as auth login user) info",
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "My user information : This has to be you as auth login user information (tips: use portal/api/v1/users/me GET result)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "User"
+        ]
+      },
+      "patch": {
+        "operationId": "UserController_patchMe",
+        "summary": "Patch my info.",
+        "description": "Patch my (as auth login user) info",
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "My user information to be updated (tips: use part of portal/api/v1/users/me GET result)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/portal/api/v1/users/manage": {
+      "post": {
+        "operationId": "ManageController_registerUser",
+        "summary": "Register new user.",
+        "description": "Register new user to AUTH0 and cloud-api User",
+        "parameters": [
+          {
+            "name": "email",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "password",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "p@$$w0rd",
+                "eD505Z8@92c9",
+                "E5cc(6@24!6%",
+                "B!e$B0c2MuCg"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "required": true,
+            "in": "query",
+            "example": "admin",
+            "schema": {
+              "enum": [
+                "technician",
+                "buyer",
+                "admin",
+                "super_admin",
+                "bright_admin"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "emailVerified",
+            "required": true,
+            "in": "query",
+            "description": "If true, no additional email verification process invoked",
+            "example": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "dealerId",
+            "required": false,
+            "in": "query",
+            "description": "If operator is standard admin, same dealerId will be assigned, if super_admin or bright_admin any dealerId can be specified. To get dealerId use GET /portal/api/v1/dealers",
+            "example": null,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phone",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User/Manage"
+        ]
+      }
+    },
+    "/api/v1/resources/{id}": {
+      "put": {
+        "operationId": "ResourceController_put",
+        "summary": "Put a resource information.",
+        "description": "Put a resource information",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The resource ID to put (id provided by mobile or scanner)",
+            "example": "12345678-1234-1234-1234-123456789abc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present.",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "tags": [
+          "Resource"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "ResourceController_findOne",
+        "summary": "Gets a resource",
+        "description": "Returns a resource matching the ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The resource ID to get",
+            "example": "12345678-1234-1234-1234-123456789abc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present.",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceWithUrlDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Resource"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "ResourceController_delete",
+        "summary": "Delete the resource.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The resource ID to delete",
+            "example": "12345678-1234-1234-1234-123456789abc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present.",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Resource"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/api/v1/resources/{id}/{revision}/raw": {
+      "put": {
+        "operationId": "ResourceController_putRawData",
+        "summary": "Uploads a base64 encoded raw data by resource id and revision.",
+        "description": "Uploads a base64 encoded raw data by resource id and revision",
+        "parameters": [
+          {
+            "name": "mimetype",
+            "in": "header",
+            "description": "The resource mime-type (e.g. image/png, application/octet-stream, etc.",
+            "schema": {
+              "type": "string",
+              "example": "text/plain"
+            }
+          },
+          {
+            "name": "revision",
+            "required": true,
+            "in": "path",
+            "description": "revision",
+            "example": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The resource ID to put",
+            "example": "22222222-2222-2222-2222-222222222222",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present with the following format: Bright Measure/[App Version]/[Build] ([Platform]; [OS Version]; [Model]).",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceBase64Dto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Resource"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "ResourceController_getRawData",
+        "summary": "Gets a raw resource data by resourceId and revison.",
+        "description": "Gets a base64 encoded raw data resource by the ID and revision.",
+        "parameters": [
+          {
+            "name": "revision",
+            "required": true,
+            "in": "path",
+            "description": "The resource revision",
+            "example": "0",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The resource ID to get",
+            "example": "12345678-1234-1234-1234-123456789abc",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present with the following format: Bright Measure/[App Version]/[Build] ([Platform]; [OS Version]; [Model]).",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Resource"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/portal/api/v1/resources/{id}": {
+      "put": {
+        "operationId": "ResourceController_portalPut",
+        "summary": "Put a resource information.",
+        "description": "Put a resource information.",
+        "deprecated": true,
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The resource ID to put (id provided by client)",
+            "example": "12345678-1234-1234-1234-123456789def",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "tags": [
+          "Resource"
+        ]
+      },
+      "get": {
+        "operationId": "ResourceController_portalFindOne",
+        "summary": "Gets a resource",
+        "description": "Returns a resource matching the ID.",
+        "deprecated": true,
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The resource ID to get",
+            "example": "12345678-1234-1234-1234-123456789def",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceWithUrlDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Resource"
+        ]
+      },
+      "delete": {
+        "operationId": "ResourceController_portalDelete",
+        "summary": "Delete the resource.",
+        "description": "Delete the resource.",
+        "deprecated": true,
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The resource ID to delete",
+            "example": "12345678-1234-1234-1234-123456789def",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Resource"
+        ]
+      }
+    },
+    "/portal/api/v1/resources/{id}/base64raw": {
+      "put": {
+        "operationId": "ResourceController_portalPutRawData",
+        "summary": "Uploads a base64 encoded raw data by resource id.",
+        "description": "Uploads a base64 encoded raw data by resource id.",
+        "parameters": [
+          {
+            "name": "mimetype",
+            "in": "header",
+            "description": "The resource mime-type (e.g. image/png, application/octet-stream, etc.",
+            "schema": {
+              "type": "string",
+              "example": "image/png"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The resource ID to put",
+            "example": "12345678-1234-1234-1234-123456789def",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceBase64Dto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Resource"
+        ]
+      },
+      "get": {
+        "operationId": "ResourceController_portalGetRawData",
+        "summary": "Gets a raw resource as base64 encoded string.",
+        "description": "Gets a raw resource as base64 encoded string.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The resource ID to get raw",
+            "example": "12345678-1234-1234-1234-123456789def",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Resource"
+        ]
+      }
+    },
+    "/portal/api/v1/resources/admin/cartesian": {
+      "get": {
+        "operationId": "ResourceAdminController_getCartesianPointInfo",
+        "summary": "Get cartesian resource info (for admin tool)",
+        "description": "Get cartesian point cloud resource info (for admin tool)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "ResourceAdmin"
+        ]
+      }
+    },
+    "/portal/api/v1/resources/admin/mesurement": {
+      "get": {
+        "operationId": "ResourceAdminController_getMeasurementInfo",
+        "summary": "Get measurement resource info (for admin tool)",
+        "description": "Get measurement point cloud resource info (for admin tool)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "ResourceAdmin"
+        ]
+      }
+    },
+    "/portal/api/v1/resources/admin/cartesian/{id}/{revision}/dxf": {
+      "patch": {
+        "operationId": "ResourceAdminController_getCartesianPointIds",
+        "summary": "Get catesian associated DXF resource (for admin tool)",
+        "description": "Get catesian associated DXF resource (for admin tool)",
+        "parameters": [
+          {
+            "name": "doOverWrite",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "",
+                "yes"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "revision",
+            "required": true,
+            "in": "path",
+            "description": "revision",
+            "example": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The cartesian resource ID",
+            "example": "111e7174-f0a5-4bf2-a367-3b7b3c94b255",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "ResourceAdmin"
+        ]
+      }
+    },
+    "/portal/api/v1/resources/admin/dxf/{id}/{revision}": {
+      "get": {
+        "operationId": "ResourceAdminController_downloadDxf",
+        "summary": "Download measuremnt DXF resource (LOCAL USE ONLY)",
+        "description": "Download measuremnt DXF resource from S3 under LOCAL server /var/tmp/",
+        "parameters": [
+          {
+            "name": "revision",
+            "required": true,
+            "in": "path",
+            "description": "revision",
+            "example": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The mesurement resource ID",
+            "example": "111e7174-f0a5-4bf2-a367-3b7b3c94b256",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "ResourceAdmin"
+        ]
+      }
+    },
+    "/portal/api/v1/resources/admin/dxf-debug": {
+      "patch": {
+        "operationId": "ResourceAdminController_debugXyzDxf",
+        "summary": "Conv xyz file to dxf file (just for LOCAL debug)",
+        "description": "Conv xyz file to dxf file (just for LOCAL debug)",
+        "parameters": [
+          {
+            "name": "spath",
+            "required": true,
+            "in": "query",
+            "description": "source xyz file path",
+            "example": "/var/tmp/test.xyz",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "opath",
+            "required": true,
+            "in": "query",
+            "description": "source xyz file path",
+            "example": "/var/tmp/test.dxf",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "ResourceAdmin"
+        ]
+      }
+    },
+    "/api/v1/projects/{id}": {
+      "put": {
+        "operationId": "ProjectController_putProject",
+        "summary": "Put a project.",
+        "description": "Put (inserrt or updat) a project",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to put",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present with the following format: Bright Measure/[App Version]/[Build] ([Platform]; [OS Version]; [Model]).",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectBaseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Project"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "ProjectController_findOne",
+        "summary": "Gets a project",
+        "description": "Returns a project matching the ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to get",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present with the following format: Bright Measure/[App Version]/[Build] ([Platform]; [OS Version]; [Model]).",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Project"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "ProjectController_patchProject",
+        "summary": "Patches the project.",
+        "description": "Patches the existing project element(s)",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to get",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present with the following format: Bright Measure/[App Version]/[Build] ([Platform]; [OS Version]; [Model]).",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectBaseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Project"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "ProjectController_deleteProject",
+        "summary": "Deletes the project.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to get",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present with the following format: Bright Measure/[App Version]/[Build] ([Platform]; [OS Version]; [Model]).",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Project"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/api/v1/projects": {
+      "get": {
+        "operationId": "ProjectController_fetchProjects",
+        "summary": "Gets the list of projects.",
+        "description": "Gets the list of projects (for the current user... since no auth yet, no such filter at this memoent: known issue).",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "example": 10,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present with the following format: Bright Measure/[App Version]/[Build] ([Platform]; [OS Version]; [Model]).",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectListWrapper"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{id}/resources": {
+      "get": {
+        "operationId": "ProjectController_findResources",
+        "summary": "Gets the project associated resources",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present with the following format: Bright Measure/[App Version]/[Build] ([Platform]; [OS Version]; [Model]).",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Resource"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{id}/scans": {
+      "get": {
+        "operationId": "ProjectController_fetchProjectScans",
+        "summary": "Gets a project scans",
+        "description": "Returns the scans for a project matching the ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID",
+            "example": "36a3ea01-2f34-40bf-b9ad-e7c9f2104b6b",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present with the following format: Bright Measure/[App Version]/[Build] ([Platform]; [OS Version]; [Model]).",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScanDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/portal/api/v1/projects": {
+      "post": {
+        "operationId": "ProjectController_portalInsert",
+        "summary": "Post a project of mine.",
+        "description": "Post a project : userId and dealerId values should be from ones of /portal/api/v1/users/me",
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectBaseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      },
+      "get": {
+        "operationId": "ProjectController_portalFetchMyDealerProjects",
+        "summary": "Gets the list of my dealer projects",
+        "description": "Gets the list of my (auth login user) dealer projects",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "example": 10,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectListWrapper"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      }
+    },
+    "/portal/api/v1/projects/{id}": {
+      "get": {
+        "operationId": "ProjectController_portalFindOne",
+        "summary": "Gets a project",
+        "description": "Returns a project matching the ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to get",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      },
+      "patch": {
+        "operationId": "ProjectController_portalPatchProject",
+        "summary": "Patches the project.",
+        "description": "Patches the existing project element(s).",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project id to patch",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectBaseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      },
+      "delete": {
+        "operationId": "ProjectController_portalDeleteProject",
+        "summary": "Deletes the project.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to get",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      }
+    },
+    "/portal/api/v1/projects/{id}/resources": {
+      "get": {
+        "operationId": "ProjectController_portalFindResources",
+        "summary": "Gets the project associated resources",
+        "description": "Gets the project associated resources",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Resource"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      }
+    },
+    "/portal/api/v1/projects/{id}/media": {
+      "get": {
+        "operationId": "ProjectController_portalFindMediaResources",
+        "summary": "Gets the project associated media resources",
+        "description": "Gets the project associated media myme-type resources",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {}
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Resource"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      }
+    },
+    "/portal/api/v1/projects/{pid}/media": {
+      "post": {
+        "operationId": "ProjectController_portalPostMedia",
+        "summary": "Post the project associated media resource and uploading base64 encoded media data",
+        "description": "Post the project associated media resource and uploading base64 encoded media data",
+        "parameters": [
+          {
+            "name": "mimetype",
+            "in": "header",
+            "description": "The resource mime-type (e.g. image/png, application/octet-stream, etc.",
+            "schema": {
+              "type": "string",
+              "example": "image/png"
+            }
+          },
+          {
+            "name": "pid",
+            "required": true,
+            "in": "path",
+            "description": "The project ID",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {}
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceBase64Dto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceWithUrl"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      }
+    },
+    "/portal/api/v1/projects/{id}/orders": {
+      "get": {
+        "operationId": "ProjectController_portalFindProjectOrders",
+        "summary": "Gets the project associated orders",
+        "description": "Gets the project associated orders",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {}
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      }
+    },
+    "/portal/api/v1/projects/{project_id}/orders/{order_id}": {
+      "put": {
+        "operationId": "ProjectController_portalLinkOrder",
+        "summary": "Link the order to the project.",
+        "parameters": [
+          {
+            "name": "order_id",
+            "required": true,
+            "in": "path",
+            "description": "The order ID to be linked",
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "project_id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to link",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "304": {
+            "description": "not modified, i.e. request ignored"
+          },
+          "404": {
+            "description": "designated order not found"
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      },
+      "delete": {
+        "operationId": "ProjectController_portalUnlinkOrder",
+        "summary": "Unlink the order from the project.",
+        "parameters": [
+          {
+            "name": "order_id",
+            "required": true,
+            "in": "path",
+            "description": "The order ID to be unlinked",
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "project_id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to unlink",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      }
+    },
+    "/portal/api/v1/employees": {
+      "get": {
+        "operationId": "EmployeeController_fetchEmployees",
+        "summary": "Gets all employees of the dealer.",
+        "description": "Gets all employees of the login user's dealer, i.e. need to call under AUTH0 login status ",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "example": 50,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Employee"
+        ]
+      },
+      "post": {
+        "operationId": "EmployeeController_portalInsertOrUpdate",
+        "summary": "Post an employee",
+        "description": "Post an employee (insert)",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Employee"
+        ]
+      }
+    },
+    "/portal/api/v1/employees/{id}": {
+      "get": {
+        "operationId": "EmployeeController_fetchEmployeeUser",
+        "summary": "Gets an employees user information.",
+        "description": "Gets an employees user information",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The employee user id to get",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Employee"
+        ]
+      },
+      "patch": {
+        "operationId": "EmployeeController_patchEmployeeUser",
+        "summary": "Patch an employees user information.",
+        "description": "Patch an employees user information",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The employee user id to patch",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Employee"
+        ]
+      }
+    },
+    "/portal/api/v1/dealers": {
+      "get": {
+        "operationId": "DealerController_findAll",
+        "summary": "Get all dealer info",
+        "description": "Get all dealer info",
+        "deprecated": true,
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Dealer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Dealer"
+        ]
+      }
+    },
+    "/portal/api/v1/dealers/{id}": {
+      "get": {
+        "operationId": "DealerController_portalFindOne",
+        "summary": "Get the dealer",
+        "description": "Get the dealer by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The dealer ID to get",
+            "example": "1daaa54e-c46d-4c55-88c2-29b3d32a2ba3",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DealerDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Dealer"
+        ]
+      },
+      "patch": {
+        "operationId": "DealerController_portalPatchDealer",
+        "summary": "Patches the dealer.",
+        "description": "Patches the existing dealer element(s).",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The dealer ID to get",
+            "example": "1daaa54e-c46d-4c55-88c2-29b3d32a2ba3",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DealerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Dealer"
+        ]
+      }
+    },
+    "/portal/api/v1/dealers/mine": {
+      "get": {
+        "operationId": "DealerController_portalFindOneOfMine",
+        "summary": "Get the dealer of mine",
+        "description": "Get the dealer of mine",
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "User-Agent",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DealerDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Dealer"
+        ]
+      }
+    },
+    "/report/api/v1/dealer": {
+      "get": {
+        "operationId": "ReportController_findAllDealerIds",
+        "summary": "Get all dealer ids",
+        "description": "Get all dealer ids",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Report"
+        ]
+      }
+    },
+    "/report/api/v1/dealer/{id}": {
+      "get": {
+        "operationId": "ReportController_getDealerReport",
+        "summary": "Get dealer report by dealer id",
+        "description": "Get dealer report by dealer id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The dealer ID to get",
+            "example": "1daaa54e-c46d-4c55-88c2-29b3d32a2ba3",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Report"
+        ]
+      }
+    },
+    "/api/v1/scan": {
+      "put": {
+        "operationId": "ScanController_put",
+        "summary": "Puts a scan metadata.",
+        "description": "Puts a scan metadata",
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "description": "For native apps, User-Agent must be present with the following format: Bright Measure/[App Version]/[Build] ([Platform]; [OS Version]; [Model]).",
+            "schema": {
+              "type": "string",
+              "example": "Bright Measure/1.0.0/2020100101 (Linux armv7l; 60.0; device-model-name)"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Specifies which language the client is able to understand. When specified, the server should localize dynamic data, like content, based on the specified language code. Static labels on the client, like headings and button labels, will be localized on the client.",
+            "schema": {
+              "type": "string",
+              "example": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Scan"
+        ],
+        "security": [
+          {
+            "access-token": []
+          }
+        ]
+      }
+    },
+    "/debug/projects/last/{min}": {
+      "get": {
+        "operationId": "DebugController_findLastProjectsDigestByMin",
+        "summary": "Get projects digest updated in last N minutes",
+        "description": "Get projects digest updated in last N minutes",
+        "parameters": [
+          {
+            "name": "min",
+            "required": true,
+            "in": "path",
+            "description": "minutes to check previously uploaded projects",
+            "example": "10",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Debug"
+        ]
+      }
+    },
+    "/debug/project/{id}": {
+      "get": {
+        "operationId": "DebugController_findProject",
+        "summary": "Get project detail",
+        "description": "Get project detail",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to get",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Debug"
+        ]
+      }
+    },
+    "/debug/project/{id}/FeatureCalibration": {
+      "get": {
+        "operationId": "DebugController_findProjectFeatureCalibration",
+        "summary": "Get project FeatureCalibration part",
+        "description": "Get project FeatureCalibration part",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to get",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Debug"
+        ]
+      }
+    },
+    "/debug/project/{id}/FeaturePerimeter": {
+      "get": {
+        "operationId": "DebugController_findProjectFeaturePerimeter",
+        "summary": "Get project FeaturePerimeter part",
+        "description": "Get project FeaturePerimeter part",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to get",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Debug"
+        ]
+      }
+    },
+    "/debug/project/{id}/resource/{type}": {
+      "get": {
+        "operationId": "DebugController_findProjectResourceByType",
+        "summary": "Get project associated all resources by type or any",
+        "description": "Get project associated all resources by type or any (if type is blank)",
+        "parameters": [
+          {
+            "name": "type",
+            "required": true,
+            "in": "path",
+            "description": "Resource Tupe",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "any",
+                "ScannerImage",
+                "UserImage",
+                "RawPointCloud",
+                "CartesianPointCloud",
+                "MobilePointCloud",
+                "FeaturePointCloud",
+                "Measurement",
+                "Log"
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The project ID to get",
+            "example": "9bad7ad4-c122-49dd-9f7c-d0921ddfd065",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Debug"
+        ]
+      }
+    },
+    "/portal/api/v1/swatch": {
+      "get": {
+        "operationId": "SwatchController_findAll",
+        "summary": "Gets all swatches",
+        "description": "Gets all swatches",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Swatch"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Swatch"
+        ]
+      }
+    },
+    "/portal/api/v1/swatch/{brand}/{pattern}/{color}": {
+      "get": {
+        "operationId": "SwatchController_findOneByBrandPatternColor",
+        "summary": "Gets all swatches",
+        "description": "Gets all swatches",
+        "parameters": [
+          {
+            "name": "brand",
+            "required": true,
+            "in": "path",
+            "example": "Premier",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Bright_CA",
+                "Bright_US",
+                "Premier"
+              ]
+            }
+          },
+          {
+            "name": "pattern",
+            "required": true,
+            "in": "path",
+            "example": "5000M",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "500P",
+                "1000V",
+                "5000M",
+                "7000MS",
+                "9000MX"
+              ]
+            }
+          },
+          {
+            "name": "color",
+            "required": true,
+            "in": "path",
+            "example": "Tan",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Green",
+                "Blue",
+                "Grey",
+                "Tan",
+                "Black"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Swatch"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Swatch"
+        ]
+      }
+    },
+    "/portal/api/v1/orders": {
+      "post": {
+        "operationId": "OrderController_portalInsert",
+        "summary": "Post an order",
+        "description": "Post an order",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderBase"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/portal/api/v1/orders/{id}": {
+      "patch": {
+        "operationId": "OrderController_portalUpdate",
+        "summary": "Patch the order",
+        "description": "Patch the order",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The order id to patch",
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderBase"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      },
+      "get": {
+        "operationId": "OrderController_portalGet",
+        "summary": "Get the order",
+        "description": "Get the order",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "The order id to get",
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/portal/api/v1/orders/myIdProjectMap": {
+      "get": {
+        "operationId": "OrderController_portalGetMyorderIdsWithProjectId",
+        "summary": "Get my dealer order ids with associated project id info",
+        "description": "Get my dealer order ids with associated project info",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Order"
+        ]
+      }
+    },
+    "/portal/api/v1/debug/authInfo": {
+      "get": {
+        "operationId": "PortalDebugController_getAuthInfo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "PortalDebug"
+        ]
+      }
+    },
+    "/portal/api/v1/debug/psqlInfo": {
+      "get": {
+        "operationId": "PortalDebugController_getPsqlInfo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "PortalDebug"
+        ]
+      }
+    },
+    "/portal/api/v1/debug/printenv": {
+      "get": {
+        "operationId": "PortalDebugController_printenv",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "PortalDebug"
+        ]
+      }
+    }
+  }
+}

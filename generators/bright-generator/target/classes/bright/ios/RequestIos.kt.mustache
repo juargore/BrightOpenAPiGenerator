@@ -1,0 +1,121 @@
+package {{packageName}}.network
+
+import platform.Foundation.HTTPMethod
+import platform.Foundation.NSHTTPURLResponse
+import platform.Foundation.NSMutableURLRequest
+import platform.Foundation.NSOperationQueue
+import platform.Foundation.NSURLComponents
+import platform.Foundation.NSURLQueryItem
+import platform.Foundation.NSURLSession
+import platform.Foundation.NSURLSessionConfiguration
+import platform.Foundation.addValue
+import platform.Foundation.allHTTPHeaderFields
+import platform.Foundation.dataTaskWithRequest
+import platform.Foundation.setHTTPBody
+import platform.Foundation.setValue
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
+
+object NSNetworking {
+    private val sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration().apply {
+    timeoutIntervalForRequest = 180.0
+    timeoutIntervalForResource = 180.0
+}
+
+val session = NSURLSession.sessionWithConfiguration(
+        sessionConfig,
+        delegate = null,
+        delegateQueue = NSOperationQueue.mainQueue
+    )
+}
+
+
+actual suspend fun nativeRequest(
+    requestConfig: RequestConfig,
+    body: ByteArray?,
+    log: NetworkLogger
+): Response = suspendCoroutine { continuation ->
+
+// Setup path
+val urlComponents = NSURLComponents(string = requestConfig.path)
+
+// Map query items
+val queryItems = requestConfig.query.flatMap { entry ->
+    entry.value.map { Pair(entry.key, it) }
+}.map {
+    NSURLQueryItem(name = it.first, value = it.second)
+}
+if (requestConfig.query.isNotEmpty()) {
+    urlComponents.queryItems = queryItems
+}
+
+// Create our request.
+val request = NSMutableURLRequest(uRL = urlComponents.URL!!)
+
+// Set the method
+request.HTTPMethod = requestConfig.method.name.uppercase()
+
+// Add all headers
+requestConfig.headers.forEach {
+    request.addValue(it.value, forHTTPHeaderField = it.key)
+}
+
+// If the request has body data, set it here.
+body?.also {
+    request.setHTTPBody(it.NSData())
+    request.setValue("${it.size}", forHTTPHeaderField = "Content-Length")
+}
+
+log.request(
+    method = requestConfig.method,
+    absoluteUrl = request.URL?.absoluteString ?: "<no url>",
+    headers = request.allHTTPHeaderFields()?.map { entry ->
+    entry.key.toString() to entry.value.toString()
+    }?.toMap() ?: emptyMap(),
+    body = body
+)
+
+    NSNetworking.session.dataTaskWithRequest(
+    request = request,
+    completionHandler = { nsData, nsurlResponse, nsError ->
+    val httpResponse = nsurlResponse as? NSHTTPURLResponse
+
+    if (nsError != null) {
+        log.response(
+            method = requestConfig.method,
+            absoluteUrl = request.URL?.absoluteString ?: "",
+            failureDescription = nsError.localizedDescription,
+            response = null
+        )
+        continuation.resumeWithException(
+        Exception("Propagating NSError: ${nsError.localizedDescription()}")
+        )
+    } else if (httpResponse == null) {
+        log.response(
+            method = requestConfig.method,
+            absoluteUrl = request.URL?.absoluteString ?: "",
+            failureDescription = "Unable to parse error",
+            response = null
+        )
+        continuation.resumeWithException(
+        Exception("Unable to parse response as NSHTTPURLResponse")
+        )
+    } else {
+        val response = Response(
+            code = httpResponse.statusCode.toInt(),
+            headers = httpResponse.allHeaderFields
+            .entries.associate { it.key as String to it.value as String },
+            body = nsData?.ByteArray(),
+        )
+        log.response(
+            method = requestConfig.method,
+            absoluteUrl = request.URL?.absoluteString ?: "",
+            failureDescription = null,
+            response = response
+        )
+
+        continuation.resume(response)
+    }
+}).resume()
+}

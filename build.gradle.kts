@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath ("com.android.tools.build:gradle:7.0.4")
         classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
-        classpath ("org.openapitools:bright-openapi-generator:1.0.0")
+        classpath ("ai.bright:bright-openapi-generator:0.0.1")
     }
 }
 

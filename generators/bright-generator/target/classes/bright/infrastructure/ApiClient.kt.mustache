@@ -2,23 +2,8 @@ package {{packageName}}.infrastructure
 
 import {{packageName}}.network.RequestConfig
 import {{packageName}}.network.NetworkLogger
-import io.ktor.client.HttpClient
-import io.ktor.client.HttpClientConfig
-import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.features.HttpClientFeature
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.JsonSerializer
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.request.*
-import io.ktor.client.request.forms.FormDataContent
-import io.ktor.client.request.forms.MultiPartFormDataContent
-import io.ktor.client.request.header
-import io.ktor.client.request.parameter
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.utils.EmptyContent
-import io.ktor.http.*
+import io.ktor.http.HttpHeaders
 import io.ktor.http.content.OutgoingContent
-import io.ktor.http.content.PartData
 import kotlinx.serialization.json.Json
 
 import {{apiPackage}}.*
@@ -30,10 +15,6 @@ import {{packageName}}.auth.*
         private val json: Json,
         private val log: NetworkLogger
 ) {
-
-private val serializer: JsonSerializer by lazy {
-        KotlinxSerializer(json).ignoreOutgoingContent()
-    }
 
     {{#hasAuthMethods}}
     private val authentications: kotlin.collections.Map<String, Authentication> by lazy {
@@ -127,15 +108,5 @@ private val serializer: JsonSerializer by lazy {
             val auth = authentications?.get(authName) ?: throw Exception("Authentication undefined: $authName")
             auth.apply(query, headers)
         }
-    }
-}
-
-// https://github.com/ktorio/ktor/issues/851
-private fun JsonSerializer.ignoreOutgoingContent() = IgnoreOutgoingContentJsonSerializer(this)
-
-private class IgnoreOutgoingContentJsonSerializer(private val delegate: JsonSerializer) : JsonSerializer by delegate {
-    override fun write(data: Any): OutgoingContent {
-        if (data is OutgoingContent) return data
-        return delegate.write(data)
     }
 }

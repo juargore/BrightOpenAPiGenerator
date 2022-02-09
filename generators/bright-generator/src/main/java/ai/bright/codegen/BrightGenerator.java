@@ -51,8 +51,8 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
 
   protected String artifactId;
   protected String artifactVersion = "0.0.1";
-  protected String groupId = "org.openapitools";
-  protected String packageName = "org.openapitools";
+  protected String groupId = "ai.bright";
+  protected String packageName = "ai.bright";
   protected String apiSuffix = "Api";
 
   protected String sourceFolder = "src/";
@@ -285,6 +285,7 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
     final String androidTypesFolder = (androidMainSourceFolder + packageName + ".types").replace(".", File.separator);
     final String iosNetworkFolder = (iosMainSourceFolder + packageName + ".network").replace(".", File.separator);
     final String iosTypesFolder = (iosMainSourceFolder + packageName + ".types").replace(".", File.separator);
+    final String iosUtilsFolder = (iosMainSourceFolder + packageName + ".utils").replace(".", File.separator);
 
     if (additionalProperties.containsKey(COLLECTION_TYPE)) {
       setCollectionType(additionalProperties.get(COLLECTION_TYPE).toString());
@@ -332,7 +333,8 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
             androidNetworkFolder,
             androidTypesFolder,
             iosNetworkFolder,
-            iosTypesFolder
+            iosTypesFolder,
+            iosUtilsFolder
     );
   }
 
@@ -344,7 +346,8 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
           final String androidNetworkFolder,
           final String androidTypesFolder,
           final String iosNetworkFolder,
-          final String iosTypesFolder
+          final String iosTypesFolder,
+          final String iosUtilsFolder
   ) {
     commonJvmMultiplatformSupportingFiles(infrastructureFolder);
     additionalProperties.put(MULTIPLATFORM, true);
@@ -415,6 +418,7 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
     // ios supporting files
     supportingFiles.add(new SupportingFile("ios/RequestIos.kt.mustache", iosNetworkFolder, "RequestIos.kt"));
     supportingFiles.add(new SupportingFile("ios/UUID.kt.mustache", iosTypesFolder, "UUID.kt"));
+    supportingFiles.add(new SupportingFile("ios/Bytes.kt.mustache", iosUtilsFolder, "Bytes.kt"));
 
     // types supporting files
     supportingFiles.add(new SupportingFile("types/UUID.kt.mustache", typesFolder, "UUID.kt"));
@@ -498,10 +502,13 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
   }
 
   @Override
+  public String escapeUnsafeCharacters(String input) {
+    return input.replace("*/", "*_/").replace("/*", "/_*");
+  }
+
+  @Override
   public String escapeQuotationMark(String input) {
-    LOGGER.warn("escapeQuotationMark should be overridden in the code generator with proper logic to escape " +
-            "single/double quote");
-    return input.replace("\"", "\\\"");
+    return input.replace("\"", "");
   }
 
   @Override

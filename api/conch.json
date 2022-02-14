@@ -1,0 +1,551 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/hardware": {
+      "post": {
+        "operationId": "createHardware",
+        "summary": "",
+        "description": "Create hardware",
+        "security": [
+          {
+            "BearerAuth": [
+              "create:hardware"
+            ]
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHardwareRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Hardware"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "hardware"
+        ]
+      },
+      "get": {
+        "operationId": "findHardware",
+        "summary": "",
+        "description": "Find hardware by property",
+        "security": [
+          {
+            "BearerAuth": [
+              "read:hardware"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "serialNumber",
+            "required": true,
+            "in": "query",
+            "description": "The serial number to look for, can be used multiple times for multiple serial numbers",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedHardware"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "hardware"
+        ]
+      }
+    },
+    "/hardware/{hardwareId}": {
+      "get": {
+        "operationId": "getHardware",
+        "summary": "",
+        "description": "Get hardware by ID",
+        "security": [
+          {
+            "BearerAuth": [
+              "read:hardware"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "hardwareId",
+            "required": true,
+            "in": "path",
+            "description": "The Hardware ID to look for.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Hardware"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "hardware"
+        ]
+      },
+      "delete": {
+        "operationId": "deleteHardware",
+        "summary": "",
+        "description": "Delete hardware by ID",
+        "security": [
+          {
+            "BearerAuth": [
+              "delete:hardware"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "hardwareId",
+            "required": true,
+            "in": "path",
+            "description": "The Hardware ID to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "hardware"
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The Health Check is successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {},
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Health Check is not successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "info": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "error": {
+                      "type": "object",
+                      "example": {
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      },
+                      "nullable": true
+                    },
+                    "details": {
+                      "type": "object",
+                      "example": {
+                        "database": {
+                          "status": "up"
+                        },
+                        "redis": {
+                          "status": "down",
+                          "message": "Could not connect"
+                        }
+                      },
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          }
+                        },
+                        "additionalProperties": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/hardware/{hardwareId}/node/{nodeId}": {
+      "put": {
+        "operationId": "putNode",
+        "summary": "",
+        "description": "Associate hardware to node",
+        "security": [
+          {
+            "BearerAuth": [
+              "update:hardware"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "hardwareId",
+            "required": true,
+            "in": "path",
+            "description": "The Hardware ID to look for.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "nodeId",
+            "required": true,
+            "in": "path",
+            "description": "The Node ID to associate Hardware to.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Hardware",
+          "Node"
+        ]
+      },
+      "delete": {
+        "operationId": "deleteNode",
+        "summary": "",
+        "description": "Removes association of hardware to node.",
+        "security": [
+          {
+            "BearerAuth": [
+              "update:hardware"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "name": "hardwareId",
+            "required": true,
+            "in": "path",
+            "description": "The Hardware ID to look for.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "nodeId",
+            "required": true,
+            "in": "path",
+            "description": "The Node ID to removing association.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Hardware",
+          "Node"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "conch",
+    "description": "hardware provider",
+    "version": "0.0.1",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "WireGuard": {
+        "type": "object",
+        "properties": {
+          "publicKey": {
+            "type": "string",
+            "example": "6NThzpcQBX9KiR2ehbeTY6wKE6vzjaL9gemMyipfH0Q=",
+            "description": "Key from set used for WireGuard identification.",
+            "pattern": "^[A-Za-z0-9+/]{42}[A|E|I|M|Q|U|Y|c|g|k|o|s|w|4|8|0]=$"
+          },
+          "nodeId": {
+            "type": "string",
+            "example": "3dae015f-cae2-43e7-b156-f83ccfa3cf8f",
+            "description": "Node identifier for Hermit.",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          }
+        },
+        "required": [
+          "publicKey"
+        ]
+      },
+      "CreateHardwareRequest": {
+        "type": "object",
+        "properties": {
+          "publicKey": {
+            "type": "string",
+            "example": "AAAAB3NzaC1yc2EAAAADAQABAAABgQC0QiH4+zWLYNXAA75xzv1CMcxEk5HLbKb4ixmacqslXfzxFb7DFRKwdE9Mb3mJ+r8xP4jkPoPNOb6mxJQibqHY2rduZ6rau/06Re0fNR6751IqrRJ8/vfR6oyNKDc3t8TwfSut8yd5yxdMlhXhTuiSXNXrrHZuwarWBodN9KOKFxLUTGdKuhJbhL4X4vRXQZ4Cy44Tfl/zAddW737rXK6BZM3DPwmhKd4MfXXTENu/CQWpOFCSbb+VoJBj9Rtj4eIA0Yxs55DYndonQXByb2MWQlofmHofxYmRb0ZD1dB4HvIFNshJibhe4xN3UxfOQ+l2SHyrJxgCRVCxwk12tCyRnnl2KpJB+cf5bLXpG2CUDQxT+gkw3ihKX6eCXceVNMKa28pf2vUz5tNRc279boNAkz5ZCI9nUlSfXI3TtE3h/NS/pM3Rs0xkbHhumZ4zumkhnO1qtpESmFETWR25MzvwY7byLTiFuEnwugNLyPfxHN/KSaoqgwrNCj3ohU+NKiU=",
+            "description": "Key from set used for public identification.",
+            "pattern": "^[0-9A-Za-z+/]{42,}[=]{0,3}$"
+          },
+          "interface": {
+            "enum": [
+              "Node",
+              "WireGuard"
+            ],
+            "type": "string",
+            "example": "WireGuard",
+            "description": "Interface used for communication"
+          },
+          "serialNumber": {
+            "type": "string",
+            "example": "C02FP1CMD6T",
+            "description": "Serial number assigned to hardware when manufactured"
+          },
+          "wireGuard": {
+            "description": "Hardware details needed for interfacing over a WireGuard network.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WireGuard"
+              }
+            ]
+          }
+        },
+        "required": [
+          "publicKey",
+          "interface",
+          "serialNumber"
+        ]
+      },
+      "Hardware": {
+        "type": "object",
+        "properties": {
+          "publicKey": {
+            "type": "string",
+            "example": "AAAAB3NzaC1yc2EAAAADAQABAAABgQC0QiH4+zWLYNXAA75xzv1CMcxEk5HLbKb4ixmacqslXfzxFb7DFRKwdE9Mb3mJ+r8xP4jkPoPNOb6mxJQibqHY2rduZ6rau/06Re0fNR6751IqrRJ8/vfR6oyNKDc3t8TwfSut8yd5yxdMlhXhTuiSXNXrrHZuwarWBodN9KOKFxLUTGdKuhJbhL4X4vRXQZ4Cy44Tfl/zAddW737rXK6BZM3DPwmhKd4MfXXTENu/CQWpOFCSbb+VoJBj9Rtj4eIA0Yxs55DYndonQXByb2MWQlofmHofxYmRb0ZD1dB4HvIFNshJibhe4xN3UxfOQ+l2SHyrJxgCRVCxwk12tCyRnnl2KpJB+cf5bLXpG2CUDQxT+gkw3ihKX6eCXceVNMKa28pf2vUz5tNRc279boNAkz5ZCI9nUlSfXI3TtE3h/NS/pM3Rs0xkbHhumZ4zumkhnO1qtpESmFETWR25MzvwY7byLTiFuEnwugNLyPfxHN/KSaoqgwrNCj3ohU+NKiU=",
+            "description": "Key from set used for public identification.",
+            "pattern": "^[0-9A-Za-z+/]{42,}[=]{0,3}$"
+          },
+          "interface": {
+            "enum": [
+              "Node",
+              "WireGuard"
+            ],
+            "type": "string",
+            "example": "WireGuard",
+            "description": "Interface used for communication"
+          },
+          "serialNumber": {
+            "type": "string",
+            "example": "C02FP1CMD6T",
+            "description": "Serial number assigned to hardware when manufactured"
+          },
+          "wireGuard": {
+            "description": "Hardware details needed for interfacing over a WireGuard network.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WireGuard"
+              }
+            ]
+          },
+          "hardwareId": {
+            "type": "string",
+            "example": "8eaa782f-b791-4fda-bc8a-2ad7162eb864",
+            "description": "Primary hardware identifier",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "publicKey",
+          "interface",
+          "serialNumber",
+          "hardwareId"
+        ]
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "next": {
+            "type": "string"
+          }
+        }
+      },
+      "PagedHardware": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Hardware"
+            }
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "required": [
+          "items"
+        ]
+      }
+    }
+  }
+}

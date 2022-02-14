@@ -114,12 +114,12 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
     reservedWords = new HashSet<String>(Arrays.asList(
             "as", "break", "class", "continue",
             "do", "else", "false", "for",
-            "fun", "if", "in", "interface",
-            "is", "null", "object", "package",
-            "return", "super", "this", "throw",
-            "true", "try", "typealias", "typeof",
-            "val", "var", "when", "while",
-            "private", "open", "external", "internal"
+            "fun", "if", "in", "is", "null",
+            "object", "package", "return", "super",
+            "this", "throw", "true", "try",
+            "typealias", "typeof", "val", "var",
+            "when", "while", "private", "open",
+            "external", "internal"
     ));
 
     defaultIncludes = new HashSet<String>(Arrays.asList(
@@ -250,9 +250,24 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
   public String getTypeDeclaration(Schema p) {
     Schema<?> schema = ModelUtils.unaliasSchema(this.openAPI, p, importMapping);
     Schema<?> target = ModelUtils.isGenerateAliasAsModel() ? p : schema;
+
     if (ModelUtils.isArraySchema(target)) {
       Schema<?> items = getSchemaItems((ArraySchema) schema);
-      return "kotlin.collections.List" + "<" + getTypeDeclaration(items) + ">";
+      String value = "kotlin.collections.List" + "<" + getTypeDeclaration(items) + ">";
+      return value;
+
+    } else if (ModelUtils.isMapSchema(target)) {
+      Schema<?> inner = getAdditionalProperties(target);
+      if (inner == null) {
+        LOGGER.error("`{}` (map property) does not have a proper inner type defined. Default to type:string", p.getName());
+        inner = new StringSchema().description("TODO default missing map inner type to string");
+        p.setAdditionalProperties(inner);
+      }
+      String mapSchema = getSchemaType(target) + "<kotlin.String, " + getTypeDeclaration(inner) + ">";
+      return mapSchema
+              .replace("kotlinCollectionsMap",  "kotlin.collections.Map")
+              .replace("kotlinCollectionsSet",  "kotlin.collections.Set")
+              .replace("kotlinCollectionsList", "kotlin.collections.List");
     }
     return super.getTypeDeclaration(target);
   }
@@ -369,6 +384,9 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
     typeMapping.put("object", "kotlin.String");
     typeMapping.put("UUID", "kotlin.String");
     typeMapping.put("kotlin.Byte.Array", "kotlin.ByteArray");
+    typeMapping.put("kotlinCollectionsMap", "kotlin.collections.Map");
+    typeMapping.put("kotlinCollectionsSet", "kotlin.collections.Set");
+    typeMapping.put("kotlinCollectionsList", "kotlin.collections.List");
 
     // multiplatform import mapping
     importMapping.put("BigDecimal", "kotlin.Double");
@@ -475,7 +493,6 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
         } else {
           finalName = modelName;
         }
-
         return finalName;
       }
     } else {
@@ -483,6 +500,58 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
     }
     return toModelName(type);
   }
+
+  // ---------------------------------- HERE -----------------------------//
+
+  @Override
+  public String toVarName(String name) {
+    name = toVariableName(name);
+
+    if(name.equals("interface")) {
+      return "`" + name + "`";
+    }
+
+    return name;
+  }
+
+  protected String toVariableName(String name) {
+    name = sanitizeName(name, "\\W-[\\$]");
+    //name = sanitizeKotlinSpecificNames(name);
+
+    if (name.toLowerCase(Locale.ROOT).matches("^_*class$")) {
+      return "propertyClass";
+    }
+
+    if ("_".equals(name)) {
+      name = "_u";
+    }
+
+    // if it's all upper case, do nothing
+    if (name.matches("^[A-Z0-9_]*$")) {
+      return name;
+    }
+
+    // If name contains special chars -> replace them.
+    if ((name.chars().anyMatch(character -> specialCharReplacements.keySet().contains(String.valueOf((char) character))))) {
+      List<String> allowedCharacters = new ArrayList<>();
+      allowedCharacters.add("_");
+      allowedCharacters.add("$");
+      name = escape(name, specialCharReplacements, allowedCharacters, "_");
+    }
+
+    // camelize (lower first character) the variable name
+    // pet_id => petId
+    name = camelize(name, true);
+
+    // for reserved word or word starting with number or containing dollar symbol, escape it
+    if (isReservedWord(name) || name.matches("(^\\d.*)|(.*[$].*)")) {
+      name = escapeReservedWord(name);
+    }
+
+    return name;
+  }
+
+  // ------------------------------- HERE ---------------------------------- //
 
   // override with any special text escaping logic
   @Override
@@ -513,7 +582,6 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
 
   @Override
   public String apiFileFolder() {
-    // generated-apis/
     return (outputFolder + File.separator + commonMainSourceFolder + apiPackage().replace('.', File.separatorChar)).replace('/', File.separatorChar);
   }
 

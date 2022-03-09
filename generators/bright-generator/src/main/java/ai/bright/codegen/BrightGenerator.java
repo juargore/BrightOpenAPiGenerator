@@ -449,10 +449,10 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
     supportingFiles.add(new SupportingFile("auth/OAuth.kt.mustache", authFolder, "OAuth.kt"));
 
     // gradle wrapper files
-    supportingFiles.add(new SupportingFile("gradlew.mustache", "", "gradlew"));
-    supportingFiles.add(new SupportingFile("gradlew.bat.mustache", "", "gradlew.bat"));
-    supportingFiles.add(new SupportingFile("gradle-wrapper.properties.mustache", gradleWrapperPackage.replace(".", File.separator), "gradle-wrapper.properties"));
-    supportingFiles.add(new SupportingFile("gradle/wrapper/gradle-wrapper.jar", gradleWrapperPackage.replace(".", File.separator), "gradle-wrapper.jar"));
+    //supportingFiles.add(new SupportingFile("gradlew.mustache", "", "gradlew"));
+    //supportingFiles.add(new SupportingFile("gradlew.bat.mustache", "", "gradlew.bat"));
+    //supportingFiles.add(new SupportingFile("gradle-wrapper.properties.mustache", gradleWrapperPackage.replace(".", File.separator), "gradle-wrapper.properties"));
+    //supportingFiles.add(new SupportingFile("gradle/wrapper/gradle-wrapper.jar", gradleWrapperPackage.replace(".", File.separator), "gradle-wrapper.jar"));
   }
 
   private void commonJvmMultiplatformSupportingFiles(String infrastructureFolder) {

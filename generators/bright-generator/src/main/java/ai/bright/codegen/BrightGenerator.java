@@ -380,7 +380,7 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
     typeMapping.put("KotlinInt", "kotlin.Int");
     typeMapping.put("KotlinDouble", "kotlin.Double");
     typeMapping.put("KotlinAny", "kotlin.Any");
-    typeMapping.put("AnyType", "kotlin.Any");
+    typeMapping.put("AnyType", "JsonElement");
     typeMapping.put("object", "kotlin.String");
     typeMapping.put("UUID", "kotlin.String");
     typeMapping.put("kotlin.Byte.Array", "kotlin.ByteArray");
@@ -389,6 +389,7 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
     typeMapping.put("kotlinCollectionsList", "kotlin.collections.List");
 
     // multiplatform import mapping
+    importMapping.put("JsonElement", "kotlinx.serialization.json.JsonElement");
     importMapping.put("BigDecimal", "kotlin.Double");
     importMapping.put("UUID", "kotlin.String");
     importMapping.put("URI", "kotlin.String");
@@ -449,10 +450,10 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
     supportingFiles.add(new SupportingFile("auth/OAuth.kt.mustache", authFolder, "OAuth.kt"));
 
     // gradle wrapper files
-    //supportingFiles.add(new SupportingFile("gradlew.mustache", "", "gradlew"));
-    //supportingFiles.add(new SupportingFile("gradlew.bat.mustache", "", "gradlew.bat"));
-    //supportingFiles.add(new SupportingFile("gradle-wrapper.properties.mustache", gradleWrapperPackage.replace(".", File.separator), "gradle-wrapper.properties"));
-    //supportingFiles.add(new SupportingFile("gradle/wrapper/gradle-wrapper.jar", gradleWrapperPackage.replace(".", File.separator), "gradle-wrapper.jar"));
+    supportingFiles.add(new SupportingFile("gradlew.mustache", "", "gradlew"));
+    supportingFiles.add(new SupportingFile("gradlew.bat.mustache", "", "gradlew.bat"));
+    supportingFiles.add(new SupportingFile("gradle-wrapper.properties.mustache", gradleWrapperPackage.replace(".", File.separator), "gradle-wrapper.properties"));
+    supportingFiles.add(new SupportingFile("gradle/wrapper/gradle-wrapper.jar", gradleWrapperPackage.replace(".", File.separator), "gradle-wrapper.jar"));
   }
 
   private void commonJvmMultiplatformSupportingFiles(String infrastructureFolder) {
@@ -493,6 +494,7 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
         } else {
           finalName = modelName;
         }
+
         return finalName;
       }
     } else {
@@ -500,8 +502,6 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
     }
     return toModelName(type);
   }
-
-  // ---------------------------------- HERE -----------------------------//
 
   @Override
   public String toVarName(String name) {
@@ -516,7 +516,6 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
 
   protected String toVariableName(String name) {
     name = sanitizeName(name, "\\W-[\\$]");
-    //name = sanitizeKotlinSpecificNames(name);
 
     if (name.toLowerCase(Locale.ROOT).matches("^_*class$")) {
       return "propertyClass";
@@ -539,8 +538,7 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
       name = escape(name, specialCharReplacements, allowedCharacters, "_");
     }
 
-    // camelize (lower first character) the variable name
-    // pet_id => petId
+    // camelize (lower first character) the variable name -> pet_id => petId
     name = camelize(name, true);
 
     // for reserved word or word starting with number or containing dollar symbol, escape it
@@ -550,8 +548,6 @@ public class BrightGenerator extends DefaultCodegen implements CodegenConfig {
 
     return name;
   }
-
-  // ------------------------------- HERE ---------------------------------- //
 
   // override with any special text escaping logic
   @Override

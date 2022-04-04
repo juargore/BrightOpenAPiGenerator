@@ -86,7 +86,7 @@ fun createOpenApiGenerateTask(yml: String) {
     }
 }
 
-createOpenApiGenerateTask("conch")
+createOpenApiGenerateTask("matter")
 
 
 android {

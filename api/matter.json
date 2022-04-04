@@ -1,0 +1,790 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Matter-Lite APIs",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/state": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/correlationId"
+        },
+        {
+          "$ref": "#/components/parameters/requestId"
+        }
+      ],
+      "post": {
+        "operationId": "readState",
+        "security": [
+          {
+            "BearerAuth": [
+              "read:matter"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/readStateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The response containing the requested state values",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/readStateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateState",
+        "security": [
+          {
+            "BearerAuth": [
+              "update:matter"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateStateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The response containing the responses to updated states",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/updateStateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        }
+      }
+    },
+    "/commands": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/correlationId"
+        },
+        {
+          "$ref": "#/components/parameters/requestId"
+        }
+      ],
+      "post": {
+        "operationId": "invokeCommands",
+        "security": [
+          {
+            "BearerAuth": [
+              "invoke:matter"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/command"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Command invoked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commandResult"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        }
+      }
+    },
+    "/subscription": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/correlationId"
+        },
+        {
+          "$ref": "#/components/parameters/requestId"
+        }
+      ],
+      "patch": {
+        "operationId": "patchesSubscription",
+        "security": [
+          {
+            "BearerAuth": [
+              "w:matter:*"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/subscriptionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated subscription",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/subscriptionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        }
+      },
+      "put": {
+        "operationId": "replaceSubscription",
+        "security": [
+          {
+            "BearerAuth": [
+              "update:matter"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/subscriptionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated subscription",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/subscriptionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        }
+      }
+    },
+    "/subscription/report": {
+      "post": {
+        "operationId": "reportSubscriptionEvent",
+        "security": [
+          {
+            "BearerAuth": [
+              "update:matter"
+            ]
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reportData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Accepted"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "BadRequest": {
+        "description": "Malformed request, invalid value used"
+      },
+      "NotFound": {
+        "description": "Not implemented on node"
+      },
+      "Unauthorized": {
+        "description": "Unauthorized"
+      },
+      "Forbidden": {
+        "description": "Forbidden"
+      },
+      "TooManyRequests": {
+        "description": "Principal has exceeded rate limits for current window"
+      },
+      "Conflict": {
+        "description": "Cannot be invoked due to concurrent process"
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "parameters": {
+      "requestId": {
+        "name": "X-REQUEST-ID",
+        "in": "header",
+        "schema": {
+          "type": "string"
+        },
+        "required": true
+      },
+      "correlationId": {
+        "name": "X-CORRELATION-ID",
+        "in": "header",
+        "schema": {
+          "type": "string"
+        },
+        "required": true
+      }
+    },
+    "schemas": {
+      "matterStatusCode": {
+        "type": "integer",
+        "format": "uint32",
+        "description": "- 0: SUCCESS \\\n- 1: FAILURE \\\n- 125: INVALID_SUBSCRIPTION \\\n- 126: UNSUPPORTED_ACCESS \\\n- 127: UNSUPPORTED_ENDPOINT \\\n- 128: INVALID_ACTION \\\n- 129: UNSUPPORTED_COMMAND \\\n- 133: INVALID_COMMAND \\\n- 134: UNSUPPORTED_ATTRIBUTE \\\n- 135: CONSTRAINT_ERROR \\\n- 136: UNSUPPORTED_WRITE \\\n- 137: RESOURCE_EXHAUSTED \\\n- 139: NOT_FOUND \\\n- 140: UNREPORTABLE_ATTRIBUTE \\\n- 141: INVALID_DATA_TYPE \\\n- 143: UNSUPPORTED_READ \\\n- 146: DATA_VERSION_MISMATCH \\\n- 148: TIMEOUT \\\n- 156: BUSY \\\n- 195: UNSUPPORTED_CLUSTER \\\n- 197: NO_UPSTREAM_SUBSCRIPTION \\\n- 198: NEEDS_TIMED_INTERACTION\n"
+      },
+      "endpointId": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 65535,
+        "example": 1,
+        "description": "An endpointId of 0xFFFF would represent a wildcard and match against any/all endpoint IDs. \\\nendpointId 0x0000 is the root endpoint and all Nodes are required to implement an endpoint 0x0000.\n"
+      },
+      "manufacturerScopedId": {
+        "type": "object",
+        "properties": {
+          "manufacturerScope": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 65535,
+            "default": 0,
+            "format": "int32",
+            "example": 0
+          },
+          "id": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 65535,
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "description": "The manufacturerScope, if present, indicate the manufacturer for which the id is scoped. \\\nA manufacturerScope of 0xFFFF would represent a wildcard and match against any/all manufacturer IDs. \\\nA id of 0xFFFF would represent a wildcard and match against any/all id.\n"
+      },
+      "clusterPath": {
+        "type": "object",
+        "properties": {
+          "endpointId": {
+            "$ref": "#/components/schemas/endpointId"
+          },
+          "clusterId": {
+            "$ref": "#/components/schemas/manufacturerScopedId"
+          }
+        },
+        "required": [
+          "endpointId",
+          "clusterId"
+        ]
+      },
+      "attributePath": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/clusterPath"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "attributeId": {
+                "$ref": "#/components/schemas/manufacturerScopedId"
+              }
+            },
+            "required": [
+              "attributeId"
+            ]
+          }
+        ]
+      },
+      "commandPath": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/clusterPath"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "commandId": {
+                "$ref": "#/components/schemas/manufacturerScopedId"
+              }
+            },
+            "required": [
+              "commandId"
+            ]
+          }
+        ]
+      },
+      "eventPath": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/clusterPath"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "eventId": {
+                "$ref": "#/components/schemas/manufacturerScopedId"
+              }
+            },
+            "required": [
+              "eventId"
+            ]
+          }
+        ]
+      },
+      "attributeValue": {
+        "description": "The value structure depends on the respective command, use JSON schema to validate"
+      },
+      "attribute": {
+        "type": "object",
+        "properties": {
+          "matterPath": {
+            "$ref": "#/components/schemas/attributePath"
+          },
+          "value": {
+            "$ref": "#/components/schemas/attributeValue"
+          }
+        },
+        "required": [
+          "matterPath",
+          "value"
+        ]
+      },
+      "attributeWriteResult": {
+        "type": "object",
+        "properties": {
+          "matterPath": {
+            "$ref": "#/components/schemas/attributePath"
+          },
+          "matterStatus": {
+            "$ref": "#/components/schemas/matterStatusCode"
+          }
+        },
+        "required": [
+          "matterPath",
+          "matterStatus"
+        ]
+      },
+      "attributeReadResult": {
+        "properties": {
+          "matterPath": {
+            "$ref": "#/components/schemas/attributePath"
+          },
+          "matterStatus": {
+            "$ref": "#/components/schemas/matterStatusCode"
+          },
+          "value": {
+            "$ref": "#/components/schemas/attributeValue"
+          }
+        },
+        "required": [
+          "matterPath",
+          "matterStatus",
+          "value"
+        ]
+      },
+      "event": {
+        "type": "object",
+        "properties": {
+          "matterPath": {
+            "$ref": "#/components/schemas/eventPath"
+          },
+          "eventNumber": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295,
+            "format": "int64",
+            "description": "A monotonically incrementing value representing the number of events generated by the Node, scoped to the Node, and preserved for the limetime of the Node."
+          },
+          "timestamp": {
+            "type": "integer",
+            "description": "Milliseconds since Unix Epoch"
+          },
+          "value": {
+            "description": "The value structure depends on the respective event, use JSON schema to validate"
+          }
+        },
+        "required": [
+          "eventNumber",
+          "timestamp",
+          "value"
+        ]
+      },
+      "eventHistory": {
+        "type": "object",
+        "properties": {
+          "matterStatus": {
+            "$ref": "#/components/schemas/matterStatusCode"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/event"
+            }
+          }
+        },
+        "required": [
+          "matterPath",
+          "matterStatus",
+          "events"
+        ]
+      },
+      "command": {
+        "type": "object",
+        "properties": {
+          "matterPath": {
+            "$ref": "#/components/schemas/commandPath"
+          },
+          "value": {
+            "description": "The value structure depends on the respective command, use JSON schema to validate"
+          }
+        },
+        "required": [
+          "matterPath",
+          "value"
+        ]
+      },
+      "commandRequest": {
+        "type": "object",
+        "properties": {
+          "suppressResponse": {
+            "type": "boolean",
+            "description": "If \"true\" the response body SHALL be empty"
+          },
+          "commands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/command"
+            }
+          }
+        },
+        "required": [
+          "suppressResponse",
+          "commands"
+        ]
+      },
+      "commandResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/command"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "matterStatus": {
+                "$ref": "#/components/schemas/matterStatusCode"
+              }
+            },
+            "required": [
+              "matterStatus"
+            ]
+          }
+        ]
+      },
+      "readStateRequest": {
+        "type": "object",
+        "properties": {
+          "eventPaths": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/eventPath"
+            }
+          },
+          "attributePaths": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/attributePath"
+            }
+          }
+        },
+        "required": [
+          "eventPaths",
+          "attributePaths"
+        ]
+      },
+      "readStateResponse": {
+        "type": "object",
+        "properties": {
+          "histories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/eventHistory"
+            }
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/attributeReadResult"
+            }
+          }
+        },
+        "required": [
+          "histories",
+          "attributes"
+        ]
+      },
+      "updateStateRequest": {
+        "type": "object",
+        "properties": {
+          "suppressResponse": {
+            "type": "boolean",
+            "description": "If \"true\" the response body SHALL be empty",
+            "default": false
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/attribute"
+            }
+          }
+        },
+        "required": [
+          "attributes"
+        ]
+      },
+      "updateStateResponse": {
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/attributeWriteResult"
+            }
+          }
+        },
+        "required": [
+          "attributes"
+        ]
+      },
+      "minIntervalFloor": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4294967295,
+        "format": "int64",
+        "description": "The requested minimum time, in seconds, between any 2 subscription reports"
+      },
+      "maxIntervalCeiling": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4294967295,
+        "format": "int64",
+        "description": "The requested maximum time, in seconds, between any 2 subscription reports"
+      },
+      "subscriptionRequest": {
+        "type": "object",
+        "properties": {
+          "minIntervalFloor": {
+            "$ref": "#/components/schemas/minIntervalFloor"
+          },
+          "maxIntervalCeiling": {
+            "$ref": "#/components/schemas/maxIntervalCeiling"
+          },
+          "attributePaths": {
+            "type": "array",
+            "description": "A list of attributes to subscribe to",
+            "items": {
+              "$ref": "#/components/schemas/attributePath"
+            }
+          },
+          "eventPaths": {
+            "type": "array",
+            "description": "A list of events to subscribe to",
+            "items": {
+              "$ref": "#/components/schemas/eventPath"
+            }
+          }
+        },
+        "required": [
+          "minIntervalFloor",
+          "maxIntervalCeiling",
+          "attributePaths",
+          "eventPaths"
+        ]
+      },
+      "subscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "subscriptionId": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295,
+            "format": "int64",
+            "description": "A unique ID of the subscription session, defined by the node generating the events. This MAY be reused if new subscriptions were added to a session."
+          },
+          "minIntervalFloor": {
+            "$ref": "#/components/schemas/minIntervalFloor"
+          },
+          "maxIntervalCeiling": {
+            "$ref": "#/components/schemas/maxIntervalCeiling"
+          }
+        },
+        "required": [
+          "subscriptionId",
+          "minIntervalFloor",
+          "maxIntervalCeiling"
+        ]
+      },
+      "reportData": {
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "type": "array",
+            "description": "A non-exhaustive list of attribute that may or may not have changed values",
+            "items": {
+              "$ref": "#/components/schemas/attribute"
+            }
+          },
+          "events": {
+            "type": "array",
+            "description": "A non-exhaustive list of events that may or may not be newly omitted",
+            "items": {
+              "$ref": "#/components/schemas/event"
+            }
+          }
+        },
+        "required": [
+          "attributes",
+          "events"
+        ]
+      }
+    }
+  }
+}
